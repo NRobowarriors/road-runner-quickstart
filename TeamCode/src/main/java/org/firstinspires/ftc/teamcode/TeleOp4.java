@@ -31,14 +31,15 @@ public class TeleOp4 extends OpMode {
         private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
 
-    private boolean isRT = false, isLT = false, isRB = false, isLB = false, timerReset = false;
+    private boolean isy = false, isb = false, isa = false, isx = false, timerReset = false;
     private boolean mecanumDriveMode = true, coastMotors = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     int buffer = 10;
-    private double clawWristNumber = 0.84;
-    private double flowerArmMin = 0.14;
+    private double clawWristDown = 0.82;// Claw Wrist Up = 1
+    private double flowerArmMin = 0.14; // max = 1
     private double flowerArmMid = 0.2;
     private double clawOpen = 0.5;
+    private double clawClose = 0.7;
     @Override
     public void init() {
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
@@ -54,8 +55,8 @@ public class TeleOp4 extends OpMode {
         armUpFlowersR = hardwareMap.servo.get("armUpFlowersR");
         armDownFlowersL = hardwareMap.servo.get("armDownFlowersL");
         claw = hardwareMap.servo.get("claw");
-        claw.setPosition(0.7);
         clawWrist = hardwareMap.servo.get("clawWrist");
+
         motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
@@ -73,8 +74,7 @@ public class TeleOp4 extends OpMode {
         motorVerticalLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorVerticalRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         coastMotors = false;
-        armUpFlowersR.setPosition(flowerArmMid);
-        armDownFlowersL.setPosition(flowerArmMid);
+
     }
 
     /**
@@ -84,6 +84,10 @@ public class TeleOp4 extends OpMode {
 
     @Override
     public void loop() {
+        telemetry.addData("isY", isy);
+        telemetry.addData("BackRight", motorRight2.getCurrentPosition());
+        telemetry.addData("FrontRight", motorRight.getCurrentPosition());
+        telemetry.addData("BackLeft", motorLeft2.getCurrentPosition());
         telemetry.addData("wrist", clawWrist.getPosition());
         telemetry.addData("LeftMTR  PWR: ", motorLeft.getPower());
         telemetry.addData("RightMTR PWR: ", motorRight.getPower());
@@ -94,71 +98,106 @@ public class TeleOp4 extends OpMode {
         telemetry.addData("left", motorVerticalLeft.getTargetPosition());
         telemetry.addData("right", motorVerticalRight.getTargetPosition());
         telemetry.addData("flowerR", armUpFlowersR.getPosition());
+        telemetry.addData("motorVerticalLeft",motorVerticalLeft.getCurrentPosition());
         telemetry.update();
+        //armUpFlowersR.setPosition(flowerArmMid);
+        //armDownFlowersL.setPosition(flowerArmMid);
+        if(gamepad2.y){
+            isy = true;
+            isb = false;
+            isa = false;
+            isx = false;
+        }
+        if(gamepad2.b){
+            isy = false;
+            isb = true;
+            isa = false;
+            isx = false;
+        }
+        if(gamepad2.a){
+            isy = false;
+            isb = false;
+            isa = true;
+            isx = false;
+        }
+        if(gamepad2.x){
+            isy = false;
+            isb = false;
+            isa = false;
+            isx = true;
+        }
 
-        if(gamepad1.right_trigger > 0.25){
-            isRT = true;
-            isLT = false;
-            isRB = false;
-            isLB = false;
-        }
-        if(gamepad1.left_trigger > 0.25){
-            isRT = false;
-            isLT = true;
-            isRB = false;
-            isLB = false;
-        }
-        if(gamepad1.right_bumper){
-            isRT = false;
-            isLT = false;
-            isRB = true;
-            isLB = false;
-        }
-        if(gamepad1.left_bumper){
-            isRT = false;
-            isLT = false;
-            isRB = false;
-            isLB = true;
-        }
-
-        if(gamepad1.b){
-            isRT = false;
-            isLT = false;
-            isRB = false;
-            isLB = false;
+        if(gamepad1.a){
+            isy = false;
+            isb = false;
+            isa = false;
+            isx = false;
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             timerReset = false;
         }
-        if(isRT) {
-            motorVerticalLeft.setTargetPosition(1000);
-            motorVerticalRight.setTargetPosition(1000);
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                motorVerticalLeft.setPower(0.3);
-                motorVerticalRight.setPower(0.3);
-            } else {
-                isRT = false;
-                armDownFlowersL.setPosition(0.4);
-                armUpFlowersR.setPosition(0.4);
-                motorVerticalLeft.setPower(0);
-                motorVerticalRight.setPower(0);
+        if(isy) {
+            motorVerticalLeft.setTargetPosition(1600);
+            motorVerticalRight.setTargetPosition(1600);
+            if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            }
+            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
+                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+                motorVerticalLeft.setPower(0.5);
+                motorVerticalRight.setPower(0.5);
+            }
+            else {
+                armDownFlowersL.setPosition(0.55);
+                armUpFlowersR.setPosition(0.55);
+                motorVerticalLeft.setPower(0.001);
+                motorVerticalRight.setPower(0.001);
+                clawWrist.setPosition(1);
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                isy = false;
             }
         }
-            else if (isLT) {
-                armUpFlowersR.setPosition(flowerArmMid);
-                armDownFlowersL.setPosition(flowerArmMid);
-                intakeArm.setPosition(0.4);
-                isLT = false;
+            else if (isb) {
+                armDownFlowersL.setPosition(0.9);
+                armUpFlowersR.setPosition(0.9);
+                clawWrist.setPosition(1);
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                isb = false;
             }
-            else if (isLB){
+            else if (isa) {
+                armDownFlowersL.setPosition(1);
+                armUpFlowersR.setPosition(1);
+                motorVerticalLeft.setTargetPosition(1450);
+                motorVerticalRight.setTargetPosition(1450);
+                if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                }
+                if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
+                        motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+                    motorVerticalLeft.setPower(0.3);
+                    motorVerticalRight.setPower(0.3);
+                }
+                else {
+                    motorVerticalLeft.setPower(0.001);
+                    motorVerticalRight.setPower(0.001);
+                    clawWrist.setPosition(1);
+                    motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                    isa = false;
+                }
+            }
+            else if (isx){
                 if(!timerReset) {
                     stopwatch.reset();
                     timerReset = true;
                 }
                 motorVerticalLeft.setTargetPosition(100);
                 motorVerticalRight.setTargetPosition(100);
-                if (motorVerticalRight.getMode() != DcMotor.RunMode.RUN_TO_POSITION)
-                {
+                if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
                     motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                     motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
@@ -174,7 +213,7 @@ public class TeleOp4 extends OpMode {
                     motorVerticalLeft.setPower(0);
                     motorVerticalRight.setPower(0);
                 }
-                clawWrist.setPosition(clawWristNumber);
+                clawWrist.setPosition(0.822);
                 claw.setPosition(clawOpen);
                 intakeTilt.setPosition(1);
                 intakeArm.setPosition(0);
@@ -192,7 +231,7 @@ public class TeleOp4 extends OpMode {
                     }else{
                         motorVerticalLeft.setPower(0);
                         motorVerticalRight.setPower(0);
-                        isLB = false;
+                        isx = false;
                         motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                         timerReset = false;
@@ -202,7 +241,7 @@ public class TeleOp4 extends OpMode {
             }
 
 
-        if(!isRT && !isLT && !isRB && !isLB){
+        if(!isy && !isb && !isa && !isx){
             if (gamepad2.left_trigger > 0.25) {
                 intakeWheelLeft.setPower(0.5);
                 intakeWheelRight.setPower(-0.5);
@@ -214,52 +253,61 @@ public class TeleOp4 extends OpMode {
                 intakeWheelRight.setPower(0);
 
             }
-            if (gamepad2.dpad_up) {
+            if (gamepad1.left_bumper) {
                 intakeTilt.setPosition(1);
             }
-            if (gamepad2.dpad_down) {
+            if (gamepad1.right_bumper) {
                 intakeTilt.setPosition(0.75);
             }
-            if (gamepad2.right_stick_y > 0.25) {
-                intakeArm.setPosition(intakeArm.getPosition() - 0.003);
-            } else if (gamepad2.right_stick_y < -0.25) {
-                intakeArm.setPosition(intakeArm.getPosition() + 0.003);
+//            if (gamepad1.right_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() + 0.008);}
+//             else if (gamepad1.left_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() - 0.008);}
+
+            if (gamepad1.right_trigger > 0.25) {
+                intakeArm.setPosition(intakeArm.getPosition() + 0.008);
+            } else if (gamepad1.left_trigger > 0.25) {
+                intakeArm.setPosition(intakeArm.getPosition() - 0.008);
             }
             if(gamepad2.left_stick_y > 0.25 ){
-                motorVerticalLeft.setPower(-0.4);
-                motorVerticalRight.setPower(-0.4);
+                motorVerticalLeft.setPower(-0.5);
+                motorVerticalRight.setPower(-0.5);
             }
             else if(gamepad2.left_stick_y < -0.25){
-                motorVerticalRight.setPower(0.4);
-                motorVerticalLeft.setPower(0.4);
+                motorVerticalRight.setPower(0.5);
+                motorVerticalLeft.setPower(0.5);
             }
             else{
-                motorVerticalRight.setPower(0);
-                motorVerticalLeft.setPower(0);
+                motorVerticalRight.setPower(0.001);
+                motorVerticalLeft.setPower(0.001);
             }
-            if (gamepad2.a) {
-                if (armUpFlowersR.getPosition() > flowerArmMin) {
-                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() - 0.005);
-                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() - 0.005);
+
+            if (gamepad2.right_stick_y > 0.25) {
+                if (armUpFlowersR.getPosition() > 0) {
+                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() - 0.014);
+                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() - 0.014);
                 }
-            } else if (gamepad2.y) {
+            } else if (gamepad2.right_stick_y < -0.25) {
                 if (armUpFlowersR.getPosition() < 1.0) {
-                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() + 0.005);
-                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() + 0.005);
+                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() + 0.014);
+                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() + 0.014);
                 }
             }
+
             if(gamepad2.left_bumper) {
-                claw.setPosition(0.7);
+                claw.setPosition(clawOpen);
             }
             else if(gamepad2.right_bumper){
-                claw.setPosition(clawOpen);
+                claw.setPosition(clawClose);
             }
 
             if(gamepad2.dpad_right){
-                clawWrist.setPosition(clawWristNumber);
+                if (clawWrist.getPosition() < 1) {
+                    clawWrist.setPosition(clawWrist.getPosition() + 0.008);
+                }
             }
             else if(gamepad2.dpad_left){
-                clawWrist.setPosition(1);
+                if (clawWrist.getPosition() > 0.18) {
+                    clawWrist.setPosition(clawWrist.getPosition() - 0.008);
+                }
             }
         }
 

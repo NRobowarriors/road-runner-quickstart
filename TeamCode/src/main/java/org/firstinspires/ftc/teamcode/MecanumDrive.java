@@ -32,11 +32,13 @@ import com.acmerobotics.roadrunner.ftc.PositionVelocityPair;
 import com.acmerobotics.roadrunner.ftc.RawEncoder;
 import com.qualcomm.hardware.lynx.LynxModule;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -57,19 +59,23 @@ public final class MecanumDrive {
         // IMU orientation
 
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
-                RevHubOrientationOnRobot.LogoFacingDirection.UP;
+                RevHubOrientationOnRobot.LogoFacingDirection.RIGHT;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.UP;
 
         // drive model parameters
-        public double inPerTick = 0.0019986676;
-        public double lateralInPerTick = inPerTick;
-        public double trackWidthTicks = 0;
+        public double inPerTick = 0.0093;
+        public double lateralInPerTick = 0.0058;//0.0015240512039087128;
+         //0.006392763250034526, 0.006296983748707297,  0.006416549653531845 = 0.0063687655507578
+        public double trackWidthTicks = 1594.2855407908123; //6407.4665315357815;
+        //1602.354193555828, 1590.7517692322087, 1589.7506595844002 = 1594.2855407908123
 
         // feedforward parameters (in tick units)
-        public double kS = 1.01730055922567;//1.0829193025 first - 1.007934611209972 second - 1.0102460136543514 thrid - 1.0337210528126808
-        public double kV = 0.000359205816666667;//0.000358234565378922 first - 0.00036150014638877535 second - 0.0003566423683127741 thrid - 0.00035947493978668026
-        public double kA = 0;
+        public double kS = 1.067173872929505; //1.0825141058775278;//1.0829193025 first - 1.007934611209972 second - 1.0102460136543514 thrid - 1.0337210528126808
+        //0.9296641107745964, 1.1577765795686856, 1.114080928445233 = 1.067173872929505
+        public double kV = 0.0014708628457043;//0.0003584912614216325;// first - 0.00036150014638877535 second - 0.0003566423683127741 thrid - 0.00035947493978668026
+        //0.0003705363124753803,0.0003504704732949914,  0.0003567549639064315 = 0.0014708628457043
+        public double kA = 0.00000000000001;//
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -106,6 +112,7 @@ public final class MecanumDrive {
             new ProfileAccelConstraint(PARAMS.minProfileAccel, PARAMS.maxProfileAccel);
 
     public final DcMotorEx leftFront, leftBack, rightBack, rightFront;
+    private CRServo intakeWheelRight, intakeWheelLeft;
 
     public final VoltageSensor voltageSensor;
 
@@ -140,6 +147,7 @@ public final class MecanumDrive {
             // TODO: reverse encoders if needed
             leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
             leftBack.setDirection(DcMotorSimple.Direction.REVERSE);
+            rightBack.setDirection(DcMotorSimple.Direction.REVERSE);
 
         }
 
@@ -222,6 +230,7 @@ public final class MecanumDrive {
         leftBack = hardwareMap.get(DcMotorEx.class, "motorLeft2");
         rightBack = hardwareMap.get(DcMotorEx.class, "motorRight2");
         rightFront = hardwareMap.get(DcMotorEx.class, "motorRight");
+
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -488,4 +497,5 @@ public final class MecanumDrive {
                 defaultVelConstraint, defaultAccelConstraint
         );
     }
+
 }
