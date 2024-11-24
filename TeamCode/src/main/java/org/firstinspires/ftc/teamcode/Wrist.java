@@ -22,10 +22,11 @@ public class Wrist {
             clawWrist.setPosition(1);
             return false;
         }
-        public Action wristUp(double positionUp) {
-            return new WristUp(positionUp);
-        }
 
+
+    }
+    public Action wristUp(double positionUp) {
+        return new WristUp(positionUp);
     }
     public class WristDown implements Action {
         double position;

@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.tuning;
 
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
+import com.acmerobotics.roadrunner.SleepAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -54,7 +56,8 @@ public final class BlueLeft extends LinearOpMode {
         Pose2d beginPose = new Pose2d(0, 0, 0);
         if (TuningOpModes.DRIVE_CLASS.equals(MecanumDrive.class)) {
             MecanumDrive drive = new MecanumDrive(hardwareMap, beginPose);
-
+            intakeTilt.setPosition(1);
+            claw.setPosition(0.7);
             Claw claw = new Claw(hardwareMap);
             VerticalLift vertical = new VerticalLift(hardwareMap);
             FlowerArm flowerArm = new FlowerArm(hardwareMap);
@@ -62,18 +65,85 @@ public final class BlueLeft extends LinearOpMode {
             Tilt intakeTilt = new Tilt(hardwareMap);
             IntakeArm intakeArm = new IntakeArm(hardwareMap);
             Wrist wrist = new Wrist(hardwareMap);
-
             waitForStart();
 
             Actions.runBlocking(new SequentialAction(
                     new ParallelAction(
-                            drive.actionBuilder(beginPose).splineToConstantHeading(new Vector2d(-24,0),0).build(),
-                            vertical.verticalLiftUp(1750, 0.7),
-                            flowerArm.flowerArmUp(0.75)
+                            drive.actionBuilder(beginPose).splineToConstantHeading(new Vector2d(-24, 0), 0).build(),
+                            vertical.verticalLiftUp(1650, 0.7),
+                            flowerArm.flowerArmUp(0.55),
+                            wrist.wristUp(1)
                     ),
+                    vertical.verticalLiftUp(1650, 0.7),
                     claw.clawOpen(),
-                    drive.actionBuilder(new Pose2d(-24.0,0.0,0.0)).splineToConstantHeading(new Vector2d(0,0),0).build()
-            ));
+                    new SleepAction(0.3),
+                    //drive.actionBuilder(new Pose2d(-24.0,0.0,0.0)).splineToConstantHeading(new Vector2d(0,0),0)
+                    new ParallelAction(
+                            vertical.verticalLiftDown(100, 0.5),
+                            flowerArm.flowerArmDown(0),
+                            drive.actionBuilder(new Pose2d(-24, 0, 0))
+                                    .strafeToLinearHeading(new Vector2d(-21, 12), Math.toRadians(87))
+                                    //.splineToSplineHeading(new Pose2d(-26, 15, Math.toRadians(90)), Math.toRadians(90))
+                                    //.lineToYSplineHeading(-10,)
+                                    .build(),
+                            wrist.wristDown(0.82),
+                            intakeArm.intakeArmOut(),
+                            intakeSuck.intakeSuckIn()
+                    ),
+                    new SleepAction(0.25),
+                    intakeTilt.tiltDown(),
+                    drive.actionBuilder(new Pose2d(-21, 12, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-21, 18), Math.toRadians(90)).build(),
+                    intakeSuck.intakeSuckInStop(),
+                    new ParallelAction(
+                            intakeTilt.tiltUp(),
+                            intakeArm.IntakeArmIn(),
+                            drive.actionBuilder(new Pose2d(-21,18, Math.toRadians(90))).turn( Math.toRadians(-45)).build()
+                    ),
+                    vertical.verticalLiftDown(0,0.5),
+                    new SleepAction(0.15),
+
+                    claw.clawClose(),
+                    new ParallelAction(
+                            drive.actionBuilder(new Pose2d(-21,18, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-21, 5), Math.toRadians(90)).build(),
+                            flowerArm.flowerArmUp(0.55),
+                            vertical.verticalLiftUp(1650,0.5)
+                    ),
+                    wrist.wristUp(1),
+                    drive.actionBuilder(new Pose2d(-21,5, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-21, -1), Math.toRadians(90)).build(),
+                    new SleepAction(0.5),
+                    claw.clawOpen(),
+                    new SleepAction(10)
+                    /*
+                    new ParallelAction(
+                            drive.actionBuilder(new Pose2d(-19.0,7.0,45)).splineToConstantHeading(new Vector2d(-19,7),0).build(),//Numbers
+                            vertical.verticalLiftDown(0,0.5),
+                            flowerArm.flowerArmDown(0)
+                            ),
+                    new ParallelAction(
+                            intakeArm.intakeArmOut(),
+                            intakeTilt.tiltUp()
+                    ),
+                    drive.actionBuilder(new Pose2d(-19.0,7.0,90)).turn(45).build(),
+                    flowerArm.flowerArmDown(0.14),
+                    claw.clawClose(),
+                    new ParallelAction(
+                            flowerArm.flowerArmUp(0.55),
+                            vertical.verticalLiftUp(1650,0.5)
+                    ),
+                    wrist.wristUp(1),
+                    new SleepAction(0.7),
+                    claw.clawOpen(),
+                    new ParallelAction(
+                            drive.actionBuilder(new Pose2d(-19.0,7.0,45)).splineToConstantHeading(new Vector2d(-19,7),0).build(),//Numbers
+                            vertical.verticalLiftDown(0,0.5),
+                            flowerArm.flowerArmDown(0)
+                    )
+
+                     */
+
+
+            )
+        );
         }  else {
             throw new RuntimeException();
         }

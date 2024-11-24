@@ -62,21 +62,23 @@ public final class BlueRight extends LinearOpMode {
             IntakeArm intakeArm = new IntakeArm(hardwareMap);
             Wrist wrist = new Wrist(hardwareMap);
 
+
             waitForStart();
 
             Actions.runBlocking(new SequentialAction(
-                drive.actionBuilder(beginPose)
+                    intakeTilt.tiltUp(),
+                    drive.actionBuilder(beginPose)
                         //.splineToConstantHeading(new Vector2d(0,-24), 0)// Negitive is Right, Postive is Left
                         .strafeTo(new Vector2d(0,-8))
                         .splineToConstantHeading(new Vector2d(48, -9), 0)
                         .strafeTo(new Vector2d(48,-14))
                         .splineToConstantHeading(new Vector2d(6,-15),0)
                         .splineToConstantHeading(new Vector2d(48,-15),0)
-                        .strafeTo(new Vector2d(48,-20))
-                        .splineToConstantHeading(new Vector2d(6,-20),0)
-                        .splineToConstantHeading(new Vector2d(48,-20),0)
-                        .strafeTo(new Vector2d(48,-27))
-                        .splineToConstantHeading(new Vector2d(6,-27),0)
+                        .strafeTo(new Vector2d(48,-24))
+                        .splineToConstantHeading(new Vector2d(6,-24),0)
+                        .splineToConstantHeading(new Vector2d(48,-24),0)
+                        .strafeTo(new Vector2d(48,-30))
+                        .splineToConstantHeading(new Vector2d(6,-30),0)
                             //.lineToX(-48)
                             .build()
             ));

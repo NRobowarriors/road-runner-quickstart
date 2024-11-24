@@ -29,7 +29,7 @@ public class Tilt {
     public class TiltDown implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intakeTilt.setPosition(0.5);
+            intakeTilt.setPosition(0.8);
             return false;
         }
     }

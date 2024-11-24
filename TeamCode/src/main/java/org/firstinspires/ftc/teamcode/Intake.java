@@ -18,18 +18,34 @@ public class Intake {
 
     public class IntakeSuckIn implements Action {
         double position;
-        public IntakeSuckIn(double positionIn) {
-            position = positionIn;
+        public IntakeSuckIn() {
+
         }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-//            intakeWheelLeft.setPosition(0);
-//            intakeWheelRight.setPosition(0);
+            intakeWheelLeft.setPower(-0.5);
+            intakeWheelRight.setPower(0.5);
             return false;
         }
     }
 
-    public Action intakeSuckIn(double positionIn) {
-        return new IntakeSuckIn(positionIn);
+    public Action intakeSuckIn() {
+        return new IntakeSuckIn();
     }
+    public class intakeSuckInStop implements Action {
+    double position;
+    public intakeSuckInStop() {
+
+    }
+    @Override
+    public boolean run(@NonNull TelemetryPacket packet) {
+        intakeWheelLeft.setPower(0);
+        intakeWheelRight.setPower(0);
+        return false;
+    }
+}
+
+public Action intakeSuckInStop() {
+    return new intakeSuckInStop();
+}
 }

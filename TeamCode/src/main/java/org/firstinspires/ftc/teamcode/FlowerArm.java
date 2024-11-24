@@ -44,8 +44,9 @@ public class FlowerArm {
             armUpFlowersR.setPosition(position);
             return false;
         }
-        public Action flowerArmDown(double positionIn) {
-            return new flowerArmDown(positionIn);
-        }
+
+    }
+    public Action flowerArmDown(double positionIn) {
+        return new flowerArmDown(positionIn);
     }
 }

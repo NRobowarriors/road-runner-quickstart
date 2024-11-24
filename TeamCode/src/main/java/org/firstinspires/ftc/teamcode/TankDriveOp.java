@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
@@ -22,8 +21,8 @@ import static java.lang.Math.abs;
  * All the code aside from importing, goes within a class file - essentially telling Android Studio-
  * to run this using java
  */
-@TeleOp(name = "TeleOp4")
-public class TeleOp4 extends OpMode {
+@TeleOp(name = "Tank Drive")
+public class TankDriveOp extends OpMode {
     private ElapsedTime stopwatch = new ElapsedTime();
     //OpenColorV_4 openCv;
     private DcMotor motorLeft, motorLeft2,
@@ -299,12 +298,12 @@ public class TeleOp4 extends OpMode {
                 claw.setPosition(clawClose);
             }
 
-            if(gamepad2.dpad_right){
+            if(gamepad2.dpad_up){
                 if (clawWrist.getPosition() < 1) {
                     clawWrist.setPosition(clawWrist.getPosition() + 0.008);
                 }
             }
-            else if(gamepad2.dpad_left){
+            else if(gamepad2.dpad_down){
                 if (clawWrist.getPosition() > 0.18) {
                     clawWrist.setPosition(clawWrist.getPosition() - 0.008);
                 }
@@ -331,7 +330,7 @@ public class TeleOp4 extends OpMode {
             motorRight2.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2);
 
         } else {
-            drive(gamepad1.left_stick_y * 0.7, gamepad1.right_stick_y * 0.7);
+            drive(gamepad1.left_stick_y * 1, gamepad1.right_stick_y * 1);
 
         }
 //        if(gamepad1.dpad_up){
