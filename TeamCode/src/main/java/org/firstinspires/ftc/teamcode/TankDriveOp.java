@@ -136,8 +136,8 @@ public class TankDriveOp extends OpMode {
             timerReset = false;
         }
         if(isy) {
-            motorVerticalLeft.setTargetPosition(1600);
-            motorVerticalRight.setTargetPosition(1600);
+            motorVerticalLeft.setTargetPosition(1750);
+            motorVerticalRight.setTargetPosition(1750);
             if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -148,11 +148,11 @@ public class TankDriveOp extends OpMode {
                 motorVerticalRight.setPower(0.5);
             }
             else {
-                armDownFlowersL.setPosition(0.55);
-                armUpFlowersR.setPosition(0.55);
+                armDownFlowersL.setPosition(0.63);
+                armUpFlowersR.setPosition(0.63);
                 motorVerticalLeft.setPower(0.001);
                 motorVerticalRight.setPower(0.001);
-                clawWrist.setPosition(1);
+                clawWrist.setPosition(0.82);
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 isy = false;
