@@ -69,14 +69,15 @@ public final class BlueLeft extends LinearOpMode {
             waitForStart();
 
             Actions.runBlocking(new SequentialAction(
+                    //First drive
                     new ParallelAction(
                             drive.actionBuilder(beginPose).strafeToLinearHeading(new Vector2d(-32, 9), Math.toRadians(42)).build(),
                             vertical.verticalLiftUp(1750, 0.7),
                             flowerArm.flowerArmUp(0.63)
                     ),
-                    vertical.verticalLiftUp(1750, 0.7),
                     claw.clawOpen(),
                     new SleepAction(0.3),
+                    //To 2nd sample
                     new ParallelAction(
                             vertical.verticalLiftDown(300, 0.5),
                             flowerArm.flowerArmDown(0.06),
@@ -87,10 +88,12 @@ public final class BlueLeft extends LinearOpMode {
                             intakeSuck.intakeSuckIn()
                     ),
                     new SleepAction(0.35),
+                    //Pick up 2nd Sample
                     intakeTilt.tiltDown(),
                     drive.actionBuilder(new Pose2d(-21, 12, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-21, 19), Math.toRadians(90)).build(),
-                    new SleepAction(0.15),
+                    new SleepAction(0.2),
                     intakeSuck.intakeSuckInStop(),
+                    //Bring sample to Center
                     new ParallelAction(
                             intakeTilt.tiltUp(),
                             intakeArm.IntakeArmIn(),
@@ -100,8 +103,43 @@ public final class BlueLeft extends LinearOpMode {
                     new SleepAction(0.15),
                     claw.clawClose(),
                     new SleepAction(0.2),
+                    //Second sample in basket
                     new ParallelAction(
-                            drive.actionBuilder(new Pose2d(-21,19, Math.toRadians(45))).splineToConstantHeading(new Vector2d(-31, 8), Math.toRadians(45)).build(),
+                            drive.actionBuilder(new Pose2d(-21,19, Math.toRadians(45))).splineToConstantHeading(new Vector2d(-30, 9), Math.toRadians(45)).build(),
+                            flowerArm.flowerArmUp(0.63),
+                            vertical.verticalLiftUp(1650,0.8)
+                    ),
+                    new SleepAction(0.5),
+                    claw.clawOpen(),
+                    new SleepAction(0.5),
+                    //Drive to 3rd sample
+                    new ParallelAction(
+                            vertical.verticalLiftDown(300, 0.5),
+                            flowerArm.flowerArmDown(0.06),
+                            drive.actionBuilder(new Pose2d(-30, 9, Math.toRadians(45)))
+                                    .strafeToLinearHeading(new Vector2d(-33, 12), Math.toRadians(90))
+                                    .build(),
+                            intakeArm.intakeArmOut(),
+                            intakeSuck.intakeSuckIn()
+                    ),
+                    new SleepAction(0.35),
+                    intakeTilt.tiltDown(),
+                    drive.actionBuilder(new Pose2d(-30, 9, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-30, 17), Math.toRadians(90)).build(),
+                    new SleepAction(0.2),
+                    intakeSuck.intakeSuckInStop(),
+                    //Sample to Center
+                    new ParallelAction(
+                        intakeTilt.tiltUp(),
+                        intakeArm.IntakeArmIn(),
+                        drive.actionBuilder(new Pose2d(-30,17, Math.toRadians(90))).turn( Math.toRadians(-45)).build()
+                    ),
+                    vertical.verticalLiftDown(50,0.5),
+                    new SleepAction(0.15),
+                    claw.clawClose(),
+                    new SleepAction(0.2),
+                    //3rd Sample to basket
+                    new ParallelAction(
+                            drive.actionBuilder(new Pose2d(-30,17, Math.toRadians(45))).splineToConstantHeading(new Vector2d(-30, 2), Math.toRadians(45)).build(),
                             flowerArm.flowerArmUp(0.63),
                             vertical.verticalLiftUp(1650,0.8)
                     ),
@@ -110,35 +148,39 @@ public final class BlueLeft extends LinearOpMode {
                     new SleepAction(0.5),
                     new ParallelAction(
                             vertical.verticalLiftDown(300, 0.5),
-                            flowerArm.flowerArmDown(0.04),
-                            drive.actionBuilder(new Pose2d(-31, 8, Math.toRadians(45)))
-                                    .strafeToLinearHeading(new Vector2d(-33, 12), Math.toRadians(90))
-                                    .build(),
+                            flowerArm.flowerArmDown(0.06),
+                            drive.actionBuilder(new Pose2d(-30, 2, Math.toRadians(45)))
+                                .strafeToLinearHeading(new Vector2d(-34, 10), Math.toRadians(105))
+                                .build(),
                             intakeArm.intakeArmOut(),
                             intakeSuck.intakeSuckIn()
                     ),
                     new SleepAction(0.35),
                     intakeTilt.tiltDown(),
-                    drive.actionBuilder(new Pose2d(-33, 12, Math.toRadians(90))).splineToConstantHeading(new Vector2d(-33, 20), Math.toRadians(90)).build(),
-                    new SleepAction(0.15),
+                    drive.actionBuilder(new Pose2d(-34, 10, Math.toRadians(105))).splineToConstantHeading(new Vector2d(-34, 14), Math.toRadians(105)).build(),
+                    new SleepAction(0.4),
                     intakeSuck.intakeSuckInStop(),
+                    //Sample to Center
                     new ParallelAction(
-                    intakeTilt.tiltUp(),
-                    intakeArm.IntakeArmIn(),
-                    drive.actionBuilder(new Pose2d(-21,19, Math.toRadians(90))).turn( Math.toRadians(-45)).build()
+                            intakeTilt.tiltUp(),
+                            intakeArm.IntakeArmIn(),
+                            drive.actionBuilder(new Pose2d(-30,17, Math.toRadians(105))).turn( Math.toRadians(-60)).build()
                     ),
                     vertical.verticalLiftDown(50,0.5),
                     new SleepAction(0.15),
                     claw.clawClose(),
-                    new SleepAction(0.2),
-                    new ParallelAction(
-                            drive.actionBuilder(new Pose2d(-21,19, Math.toRadians(45))).splineToConstantHeading(new Vector2d(-31, 8), Math.toRadians(45)).build(),
+                    new SleepAction(0.2)
+                    //4rd Sample to basket
+                    /*new ParallelAction(
+                            drive.actionBuilder(new Pose2d(-34,14, Math.toRadians(45))).splineToConstantHeading(new Vector2d(-30, 2), Math.toRadians(45)).build(),
                             flowerArm.flowerArmUp(0.63),
                             vertical.verticalLiftUp(1650,0.8)
                     ),
                     new SleepAction(0.5),
                     claw.clawOpen(),
-                    new SleepAction(10)
+                    new SleepAction(0.5)
+
+                     */
             )
         );
         }  else {

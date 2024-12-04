@@ -19,7 +19,7 @@ public class Wrist {
         }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            clawWrist.setPosition(1);
+            clawWrist.setPosition(0.99);
             return false;
         }
 
@@ -35,7 +35,7 @@ public class Wrist {
         }
         @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-            clawWrist.setPosition(1);
+            clawWrist.setPosition(0.99);
             return false;
             }
         }

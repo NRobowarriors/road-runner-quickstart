@@ -42,8 +42,8 @@ public class VerticalLift {
             if (pos < ticks) {
                 return true;
             } else {
-                motorVerticalLeft.setPower(0);
-                motorVerticalRight.setPower(0);
+                motorVerticalLeft.setPower(0.001);
+                motorVerticalRight.setPower(0.001);
                 return false;
             }
         }
@@ -80,5 +80,26 @@ public class VerticalLift {
 
     public Action verticalLiftDown(int ticksIn, double powerIn) {
         return new VerticalLiftDown(ticksIn, powerIn);
+    }
+    public class verticalLiftStay implements Action {
+        private boolean initialized = false;
+        private double power;
+        public verticalLiftStay(double powerIn){ power = powerIn;}
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                motorVerticalLeft.setPower(1 * power);
+                motorVerticalRight.setPower(1 * power);
+                initialized = true;
+            }
+            double pos = motorVerticalLeft.getCurrentPosition();
+            packet.put("verticalPos", pos);
+            return false;
+        }
+    }
+
+    public Action verticalLiftStay(double powerIn) {
+        return new verticalLiftStay(powerIn);
     }
 }
