@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 public class Wrist {
     private Servo clawWrist;
-    public Wrist(HardwareMap hardwareMap) {
-        clawWrist = hardwareMap.get(Servo.class, "clawWrist");
+    public Wrist(Servo wrist) {
+        clawWrist = wrist;
     }
     public class WristUp implements Action {
         double position;
@@ -19,27 +19,28 @@ public class Wrist {
         }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            clawWrist.setPosition(0.99);
+            clawWrist.setPosition(position);
             return false;
         }
-
-
     }
+
     public Action wristUp(double positionUp) {
         return new WristUp(positionUp);
     }
+
     public class WristDown implements Action {
         double position;
         public WristDown(double positionDown) {
             position = positionDown;
         }
         @Override
-            public boolean run(@NonNull TelemetryPacket packet) {
-            clawWrist.setPosition(0.99);
+        public boolean run(@NonNull TelemetryPacket packet) {
+            clawWrist.setPosition(position);
             return false;
-            }
         }
-        public Action wristDown(double positionDown) {
-            return new WristDown(positionDown);
+    }
+
+    public Action wristDown(double positionDown) {
+        return new WristDown(positionDown);
     }
 }

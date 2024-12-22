@@ -29,7 +29,7 @@ public class Claw {
     public class ClawClose implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            claw.setPosition(0.75);
+            claw.setPosition(1);
             return false;
         }
     }

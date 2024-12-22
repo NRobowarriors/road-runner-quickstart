@@ -38,7 +38,7 @@ public class TankDriveOp extends OpMode {
     private double flowerArmMin = 0.14; // max = 1
     private double flowerArmMid = 0.2;
     private double clawOpen = 0.5;
-    private double clawClose = 0.75;
+    private double clawClose = 1;//0.75;
     @Override
     public void init() {
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
@@ -51,6 +51,7 @@ public class TankDriveOp extends OpMode {
         intakeWheelLeft = hardwareMap.crservo.get("intakeWheelLeft");
         intakeTilt = hardwareMap.servo.get("intakeTilt");
         intakeArm = hardwareMap.servo.get("intakeArm");
+        intakeArm.setPosition(0.09);
         armUpFlowersR = hardwareMap.servo.get("armUpFlowersR");
         armDownFlowersL = hardwareMap.servo.get("armDownFlowersL");
         claw = hardwareMap.servo.get("claw");
@@ -73,7 +74,7 @@ public class TankDriveOp extends OpMode {
         motorVerticalLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorVerticalRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         coastMotors = false;
-
+        clawWrist.setPosition(0.84);
     }
 
     /**
@@ -136,8 +137,8 @@ public class TankDriveOp extends OpMode {
             timerReset = false;
         }
         if(isy) {
-            motorVerticalLeft.setTargetPosition(1750);
-            motorVerticalRight.setTargetPosition(1750);
+            motorVerticalLeft.setTargetPosition(1780);
+            motorVerticalRight.setTargetPosition(1780);
             if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -148,11 +149,11 @@ public class TankDriveOp extends OpMode {
                 motorVerticalRight.setPower(0.5);
             }
             else {
-                armDownFlowersL.setPosition(0.63);
-                armUpFlowersR.setPosition(0.63);
+                armDownFlowersL.setPosition(0.68);
+                armUpFlowersR.setPosition(0.68);
                 motorVerticalLeft.setPower(0.001);
                 motorVerticalRight.setPower(0.001);
-                clawWrist.setPosition(0.82);
+                clawWrist.setPosition(0.9);
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 isy = false;
@@ -161,7 +162,7 @@ public class TankDriveOp extends OpMode {
             else if (isb) {
                 armDownFlowersL.setPosition(0.9);
                 armUpFlowersR.setPosition(0.9);
-                clawWrist.setPosition(0.99);
+                clawWrist.setPosition(0.9);
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 isb = false;
@@ -183,7 +184,7 @@ public class TankDriveOp extends OpMode {
                 else {
                     motorVerticalLeft.setPower(0.001);
                     motorVerticalRight.setPower(0.001);
-                    clawWrist.setPosition(0.99);
+                    clawWrist.setPosition(0.9);
                     motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     isa = false;
@@ -261,10 +262,10 @@ public class TankDriveOp extends OpMode {
 //            if (gamepad1.right_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() + 0.008);}
 //             else if (gamepad1.left_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() - 0.008);}
 
-            if (gamepad1.right_trigger > 0.25) {
-                intakeArm.setPosition(intakeArm.getPosition() + 0.008);
-            } else if (gamepad1.left_trigger > 0.25) {
-                intakeArm.setPosition(intakeArm.getPosition() - 0.008);
+            if (gamepad1.right_trigger > 0.25 && intakeArm.getPosition() < 0.34) {
+                intakeArm.setPosition(intakeArm.getPosition() + 0.02);
+            } else if (gamepad1.left_trigger > 0.25 && intakeArm.getPosition() > 0.09) {
+                intakeArm.setPosition(intakeArm.getPosition() - 0.02);
             }
             if(gamepad2.left_stick_y > 0.25 ){
                 motorVerticalLeft.setPower(-0.5);
@@ -299,7 +300,7 @@ public class TankDriveOp extends OpMode {
             }
 
             if(gamepad2.dpad_up){
-                if (clawWrist.getPosition() < 0.99) {
+                if (clawWrist.getPosition() < 0.9) {
                     clawWrist.setPosition(clawWrist.getPosition() + 0.008);
                 }
             }

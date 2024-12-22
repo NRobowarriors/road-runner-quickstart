@@ -9,16 +9,20 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+
 public class VerticalLift {
     private DcMotorEx motorVerticalRight, motorVerticalLeft;
+    private Telemetry telemetry;
 
-    public VerticalLift(HardwareMap hardwareMap) {
+    public VerticalLift(HardwareMap hardwareMap, Telemetry intelemetry) {
         motorVerticalLeft = hardwareMap.get(DcMotorEx.class, "LmotorLift");
         motorVerticalRight = hardwareMap.get(DcMotorEx.class, "RmotorLift");
         motorVerticalLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorVerticalRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorVerticalLeft.setDirection(DcMotorSimple.Direction.FORWARD);
         motorVerticalRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        telemetry = intelemetry;
     }
 
     public class VerticalLiftUp implements Action {
@@ -39,6 +43,8 @@ public class VerticalLift {
             }
             int pos = motorVerticalLeft.getCurrentPosition();
             packet.put("verticalPos", pos);
+            telemetry.addData("vertical Pos", pos);
+            telemetry.update();
             if (pos < ticks) {
                 return true;
             } else {
@@ -68,6 +74,8 @@ public class VerticalLift {
             }
             double pos = motorVerticalLeft.getCurrentPosition();
             packet.put("verticalPos", pos);
+            packet.addLine("verticalPos " +pos);
+
             if (pos > ticks) {
                 return true;
             } else {

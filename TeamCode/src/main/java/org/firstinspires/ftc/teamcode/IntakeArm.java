@@ -17,7 +17,7 @@ public class IntakeArm {
     public class IntakeArmIn implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intakeArm.setPosition(0);
+            intakeArm.setPosition(0.09);
             return false;
         }
     }
@@ -29,7 +29,7 @@ public class IntakeArm {
     public class IntakeArmOut implements Action {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intakeArm.setPosition(0.35);
+            intakeArm.setPosition(0.34);
             return false;
         }
     }
