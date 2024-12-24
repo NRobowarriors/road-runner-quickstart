@@ -95,16 +95,17 @@ public final class BlueRight extends LinearOpMode {
         Wrist wrist = new Wrist(clawWrist);
 
         Action firstSpeciman = drive.actionBuilder(beginPose)
-                .strafeToLinearHeading(new Vector2d(-26, 0), Math.toRadians(0))
+                .strafeToLinearHeading(new Vector2d(-25, 0), Math.toRadians(0))
                 //.strafeToLinearHeading(new Vector2d(-32, 9), Math.toRadians(42))
                 .build();
-        Action driveToFirstSample = drive.actionBuilder(new Pose2d(-26, 0, Math.toRadians(0)))
-                .strafeToLinearHeading(new Vector2d(-26, 31), Math.toRadians(180))
-                .splineToConstantHeading(new Vector2d(-51,31),0)
+        Action driveToFirstSample = drive.actionBuilder(new Pose2d(-25, 0, Math.toRadians(0)))
+                .strafeToLinearHeading(new Vector2d(-25, 31), Math.toRadians(180))
+                .splineToConstantHeading(new Vector2d(-51,31), Math.toRadians(180))
+                .strafeToLinearHeading(new Vector2d(-51,38), Math.toRadians(180))
                 .build();
-//        Action secondSamplePickUpDrive = drive.actionBuilder(new Pose2d(-22, 12, Math.toRadians(93)))
-//                .splineToConstantHeading(new Vector2d(-21, 19), Math.toRadians(93))
-//                .build();
+        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(-51, 38, Math.toRadians(180)))
+                .splineToConstantHeading(new Vector2d(-10, 38), Math.toRadians(180))
+                .build();
 ////        Action secondSampleTurnToBucket = drive.actionBuilder(new Pose2d(-22,19, Math.toRadians(93))).
 //                turn( Math.toRadians(-48))
 //                .build();
@@ -150,10 +151,10 @@ public final class BlueRight extends LinearOpMode {
                         wrist.wristUp(wristOpen)
                 ),
                 vertical.verticalLiftDown(vertMidHigh, 0.3),
-                new ParallelAction(
-                        driveToFirstSample
-                ),
-
+                claw.clawOpen(),
+                new SleepAction(0.3),
+                driveToFirstSample,
+                driveToHumanPlayer,
 //                claw.clawOpen(),
 //                new SleepAction(0.3),
 //                //To 2nd sample

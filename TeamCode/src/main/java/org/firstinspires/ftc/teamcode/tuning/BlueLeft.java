@@ -106,9 +106,9 @@ public final class BlueLeft extends LinearOpMode {
                 .build();
         Action secondSampleDriveToBucket = drive.actionBuilder(new Pose2d(-22,19, Math.toRadians(45)))
                 .splineToConstantHeading(new Vector2d(-30, 18), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-36, 15), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-37, 14), Math.toRadians(45))
                 .build();
-        Action thirdSampleDriveToSample = drive.actionBuilder(new Pose2d(-32, 11, Math.toRadians(45)))
+        Action thirdSampleDriveToSample = drive.actionBuilder(new Pose2d(-33, 10, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-33, 11), Math.toRadians(84))
                 .build();
         Action thirdSamplePickUpDrive = drive.actionBuilder(new Pose2d(-33, 15, Math.toRadians(81)))
@@ -119,20 +119,20 @@ public final class BlueLeft extends LinearOpMode {
                 .build();
         Action thirdSampleDriveToBucket = drive.actionBuilder(new Pose2d(-38,22, Math.toRadians(45)))
                 .splineToConstantHeading(new Vector2d(-29, 15), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-34, 9), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-36, 7), Math.toRadians(45))
                 .build();
-        Action fourthSampleDriveToSample = drive.actionBuilder(new Pose2d(-29, 6, Math.toRadians(45)))
+        Action fourthSampleDriveToSample = drive.actionBuilder(new Pose2d(-30, 5, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-34, 10), Math.toRadians(110))
                 .build();
         Action fourthSamplePickUpDrive = drive.actionBuilder(new Pose2d(-34, 10, Math.toRadians(110)))
                 .splineToConstantHeading(new Vector2d(-36, 17), Math.toRadians(110))
                 .build();
         Action fourthSampleTurnToBucket = drive.actionBuilder(new Pose2d(-36,17, Math.toRadians(110)))
-                .turn( Math.toRadians(-76))
+                .turn( Math.toRadians(-90))
                 .build();
         Action fourthSampleDriveToBucket = drive.actionBuilder(new Pose2d(-36,17, Math.toRadians(45)))
-                .splineToConstantHeading(new Vector2d(-37, 9), Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-32, 4), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-25, 17), Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-22, 4), Math.toRadians(45))
                 .build();
         Action moveToHang = drive.actionBuilder(new Pose2d(-32,4, Math.toRadians(45)))
                 .strafeToLinearHeading(new Vector2d(-10, 51), Math.toRadians(180))
