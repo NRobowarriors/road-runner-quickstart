@@ -26,7 +26,7 @@ public class TankDriveOp extends OpMode {
     private ElapsedTime stopwatch = new ElapsedTime();
     //OpenColorV_4 openCv;
     private DcMotor motorLeft, motorLeft2,
-            motorRight, motorRight2, motorVerticalLeft, motorVerticalRight;
+            motorRight, motorRight2, motorVerticalLeft, motorVerticalRight, hang;
         private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
 
@@ -39,6 +39,7 @@ public class TankDriveOp extends OpMode {
     private double flowerArmMid = 0.2;
     private double clawOpen = 0.5;
     private double clawClose = 1;//0.75;
+    boolean isThere = true;
     @Override
     public void init() {
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
@@ -56,10 +57,13 @@ public class TankDriveOp extends OpMode {
         armDownFlowersL = hardwareMap.servo.get("armDownFlowersL");
         claw = hardwareMap.servo.get("claw");
         clawWrist = hardwareMap.servo.get("clawWrist");
+        hang = hardwareMap.dcMotor.get("hang");
 
         motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
+        hang.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        hang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        hang.setTargetPosition(0);
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
         motorVerticalRight.setDirection(DcMotor.Direction.REVERSE);
@@ -99,6 +103,7 @@ public class TankDriveOp extends OpMode {
         telemetry.addData("right", motorVerticalRight.getTargetPosition());
         telemetry.addData("flowerR", armUpFlowersR.getPosition());
         telemetry.addData("motorVerticalLeft",motorVerticalLeft.getCurrentPosition());
+        telemetry.addData("hang",hang.getCurrentPosition());
         telemetry.update();
         //armUpFlowersR.setPosition(flowerArmMid);
         //armDownFlowersL.setPosition(flowerArmMid);
@@ -268,12 +273,12 @@ public class TankDriveOp extends OpMode {
                 intakeArm.setPosition(intakeArm.getPosition() - 0.02);
             }
             if(gamepad2.left_stick_y > 0.25 ){
-                motorVerticalLeft.setPower(-0.5);
-                motorVerticalRight.setPower(-0.5);
+                motorVerticalLeft.setPower(-0.7);
+                motorVerticalRight.setPower(-0.7);
             }
             else if(gamepad2.left_stick_y < -0.25){
-                motorVerticalRight.setPower(0.5);
-                motorVerticalLeft.setPower(0.5);
+                motorVerticalRight.setPower(0.7);
+                motorVerticalLeft.setPower(0.7);
             }
             else{
                 motorVerticalRight.setPower(0.001);
@@ -308,6 +313,19 @@ public class TankDriveOp extends OpMode {
                 if (clawWrist.getPosition() > 0.8) {
                     clawWrist.setPosition(clawWrist.getPosition() - 0.008);
                 }
+            }
+            if(gamepad1.dpad_up){
+                isThere = false;
+                hang.setTargetPosition(-3640);
+                hang.setPower(1);
+            } else if(gamepad1.dpad_down){
+                isThere = false;
+                hang.setTargetPosition(-2173);
+                hang.setPower(1);
+            }else if(gamepad1.dpad_left){
+                isThere = false;
+                hang.setTargetPosition(0);
+                hang.setPower(1);
             }
         }
 
