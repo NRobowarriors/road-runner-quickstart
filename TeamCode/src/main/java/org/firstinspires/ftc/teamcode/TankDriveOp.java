@@ -62,8 +62,8 @@ public class TankDriveOp extends OpMode {
         motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         hang.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        hang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         hang.setTargetPosition(0);
+        hang.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         motorRight.setDirection(DcMotor.Direction.REVERSE);
         motorRight2.setDirection(DcMotor.Direction.REVERSE);
         motorVerticalRight.setDirection(DcMotor.Direction.REVERSE);
@@ -103,7 +103,7 @@ public class TankDriveOp extends OpMode {
         telemetry.addData("right", motorVerticalRight.getTargetPosition());
         telemetry.addData("flowerR", armUpFlowersR.getPosition());
         telemetry.addData("motorVerticalLeft",motorVerticalLeft.getCurrentPosition());
-        telemetry.addData("hang",hang.getCurrentPosition());
+        //telemetry.addData("hang",hang.getCurrentPosition());
         telemetry.update();
         //armUpFlowersR.setPosition(flowerArmMid);
         //armDownFlowersL.setPosition(flowerArmMid);
@@ -317,15 +317,17 @@ public class TankDriveOp extends OpMode {
             if(gamepad1.dpad_up){
                 isThere = false;
                 hang.setTargetPosition(-3640);
-                hang.setPower(1);
             } else if(gamepad1.dpad_down){
                 isThere = false;
                 hang.setTargetPosition(-2173);
-                hang.setPower(1);
             }else if(gamepad1.dpad_left){
                 isThere = false;
                 hang.setTargetPosition(0);
-                hang.setPower(1);
+            }
+            if(isThere){
+                if(hang.getCurrentPosition() != hang.getTargetPosition()){
+                    hang.setPower(1);
+                }
             }
         }
 
