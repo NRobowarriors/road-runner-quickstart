@@ -37,12 +37,12 @@ public final class BlueLeft extends LinearOpMode {
     private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
-    private int vertHigh = 1770;
+    private int vertHigh = 1760;
     private int vertMid = 300;
     private int vertLow = 50;
     private double wristDrop = 0.89;
     private double flowerDrop = 0.64;
-    private double wristGrab = 0.9;
+    private double wristGrab = 0.84;
     private double flowerGrab = 0.00;
     private double flowerMid = 0.5;
     private Pose2d beginPose = new Pose2d(0, 0, 0);

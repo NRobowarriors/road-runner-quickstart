@@ -44,7 +44,7 @@ public final class HailRight extends LinearOpMode {
     private double flowerDrop = 1;
     private double wristGrab = 0.9;
     private double flowerGrab = 0.6572;
-    private double flowerMid = 0.25;
+    private double flowerMid = 0.2;
     private Pose2d beginPose = new Pose2d(0, 0, 0);
     MecanumDrive drive;
     private Action full;
@@ -92,6 +92,8 @@ public final class HailRight extends LinearOpMode {
         Tilt intakeTilt = new Tilt(hardwareMap);
         IntakeArm intakeArm = new IntakeArm(hardwareMap);
         Wrist wrist = new Wrist(clawWrist);
+        intakeArm.IntakeArmIn();
+        intakeTilt.tiltUp();
         double specimanX = -27.5;
         double specimanY = 0;
         double firstSampleX = -25;
@@ -112,19 +114,25 @@ public final class HailRight extends LinearOpMode {
                 .splineTo(new Vector2d(-23, 16), ninety)
                 .splineTo(new Vector2d(-40,26),turn)
                 .splineToConstantHeading(new Vector2d(-50, 38), turn)
-                .splineToConstantHeading(new Vector2d(-12,39),turn)
+                .splineToConstantHeading(new Vector2d(-16,39),turn)
+                //.lineToX(-12)
                 .build();
         Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(secondSampleDriveX, secondSampleDriveY, turn))
                 .strafeToLinearHeading(new Vector2d(sampleHumanX, secondSampleDriveY ), turn)
                 .build();
-        Action driveToThirdSample = drive.actionBuilder(new Pose2d(sampleHumanX,secondSampleDriveY, turn))
-                .strafeToLinearHeading(new Vector2d(secondSampleDriveX, secondSampleDriveY), turn)
+        Action driveToSecondSample = drive.actionBuilder(new Pose2d(-16,39, turn))
+                .splineToConstantHeading(new Vector2d(-40, 39), turn)
+                .splineToConstantHeading(new Vector2d(-50, 47), turn)
+                .splineToConstantHeading(new Vector2d(-16, 48), turn)
+                //.lineToX(-12)
                 .build();
-        Action thirdSampleDriveToSample = drive.actionBuilder(new Pose2d(secondSampleDriveX, secondSampleDriveY, turn))
-                .strafeToLinearHeading(new Vector2d(secondSampleDriveX, shiftAtTopY), turn)
-                .strafeToLinearHeading(new Vector2d(sampleHumanX + 2.7,shiftAtTopY),turn)
+        Action driveToThirdSample = drive.actionBuilder(new Pose2d(-16, 48, turn))
+                .splineToConstantHeading(new Vector2d(-40, 48), turn)
+                .splineToConstantHeading(new Vector2d(-50,53.5),turn)
+                //.splineToConstantHeading(new Vector2d(-16,53.5),turn)
+                .lineToX(-6)
                 .build();
-        Action secondSpeciman = drive.actionBuilder(new Pose2d(sampleHumanX + 2, shiftAtTopY, turn))
+        Action secondSpeciman = drive.actionBuilder(new Pose2d(sampleHumanX + 2.7, shiftAtTopY, turn))
                 .strafeToLinearHeading(new Vector2d(specimanX, specimanY - 3), zero)
                 .build();
 //        Action thirdSampleTurnToBucket = drive.actionBuilder(new Pose2d(secondSampleX,secondSampleY, ninedy))
@@ -154,27 +162,32 @@ public final class HailRight extends LinearOpMode {
         full = new SequentialAction(
                 //First drive
                 new ParallelAction(
-                        //vertical.exactVertical(vertSpeciman, 0.6),
+                        vertical.exactVertical(vertSpeciman, 0.6),
+                        intakeArm.IntakeArmIn(),
+                        intakeTilt.tiltUp(),
                         new SequentialAction(
-                                //new SleepAction(0.5),
-                                //flowerArm.flowerArmUp(flowerGrab),
+                                new SleepAction(0.5),
+                                flowerArm.flowerArmUp(flowerGrab),
                                 firstSpeciman
                         )
                 ),
-                //claw.clawOpen(),
+                claw.clawOpen(),
                 new SleepAction(0.2),
                 new ParallelAction(
-                    driveToFirstSample
-                    //flowerArm.flowerArmUp(flowerDrop),
-                    //vertical.verticalLiftDown(vertLow, 0.7),
-                    //vertical.verticalLiftStay(0.01)
-                    )
-//                driveToHumanPlayer,
-//                driveToThirdSample,
+                    driveToFirstSample,
+                    new SequentialAction(
+                            new SleepAction(0.5),
+                            flowerArm.flowerArmUp(flowerMid)
+                    ),
+                    vertical.verticalLiftDown(0, 0.7)
+//                    vertical.verticalLiftStay(0.01)
+                ),
+                driveToSecondSample,
+                driveToThirdSample
 //                thirdSampleDriveToSample,
 //                claw.clawClose(),
 //                new SleepAction(0.5),
-//                vertical.verticalLiftUp(vertSpeciman, 0.7),
+//                vertical.exactVertical(vertSpeciman, 0.7),
 //                new SleepAction(0.5),
 //                secondSpeciman,
 //                vertical.verticalLiftDown(vertGrab, 0.7),
