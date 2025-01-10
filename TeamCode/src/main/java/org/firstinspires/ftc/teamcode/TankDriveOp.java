@@ -107,7 +107,7 @@ public class TankDriveOp extends OpMode {
         telemetry.update();
         //armUpFlowersR.setPosition(flowerArmMid);
         //armDownFlowersL.setPosition(flowerArmMid);
-        if(gamepad2.y){
+        /*if(gamepad2.y){
             isy = true;
             isb = false;
             isa = false;
@@ -141,6 +141,8 @@ public class TankDriveOp extends OpMode {
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             timerReset = false;
         }
+
+         */
         if(isy) {
             motorVerticalLeft.setTargetPosition(1780);
             motorVerticalRight.setTargetPosition(1780);

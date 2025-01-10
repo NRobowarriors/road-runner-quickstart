@@ -37,13 +37,13 @@ public final class HailRight extends LinearOpMode {
     private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
-    private int vertSpeciman = 1346;
+    private int vertSpeciman = 495;
     private int vertGrab = 1090;
     private int vertLow = 357;
     private double wristDrop = 0.84;
     private double flowerDrop = 1;
     private double wristGrab = 0.9;
-    private double flowerGrab = 0.00;
+    private double flowerGrab = 0.6572;
     private double flowerMid = 0.25;
     private Pose2d beginPose = new Pose2d(0, 0, 0);
     MecanumDrive drive;
@@ -92,7 +92,7 @@ public final class HailRight extends LinearOpMode {
         Tilt intakeTilt = new Tilt(hardwareMap);
         IntakeArm intakeArm = new IntakeArm(hardwareMap);
         Wrist wrist = new Wrist(clawWrist);
-        double specimanX = -23.5;
+        double specimanX = -27.5;
         double specimanY = 0;
         double firstSampleX = -25;
         double firstSampleY = 30;
@@ -104,13 +104,15 @@ public final class HailRight extends LinearOpMode {
 //        double ninedy  = Math.toRadians(90);
         double zero = Math.toRadians(0);
         double turn = Math.toRadians(180);
+        double ninety = Math.toRadians(90);
         Action firstSpeciman = drive.actionBuilder(beginPose)
                 .strafeToLinearHeading(new Vector2d(specimanX, specimanY), zero)
                 .build();
         Action driveToFirstSample = drive.actionBuilder(new Pose2d(specimanX, specimanY, zero))
-                .strafeToLinearHeading(new Vector2d(firstSampleX, firstSampleY), turn)
-                .strafeToLinearHeading(new Vector2d(secondSampleDriveX,firstSampleY),turn)
-                .strafeToLinearHeading(new Vector2d(secondSampleDriveX,secondSampleDriveY),turn)
+                .splineTo(new Vector2d(-23, 16), ninety)
+                .splineTo(new Vector2d(-40,26),turn)
+                .splineToConstantHeading(new Vector2d(-50, 38), turn)
+                .splineToConstantHeading(new Vector2d(-12,39),turn)
                 .build();
         Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(secondSampleDriveX, secondSampleDriveY, turn))
                 .strafeToLinearHeading(new Vector2d(sampleHumanX, secondSampleDriveY ), turn)
@@ -152,32 +154,33 @@ public final class HailRight extends LinearOpMode {
         full = new SequentialAction(
                 //First drive
                 new ParallelAction(
-                        vertical.verticalLiftUp(vertSpeciman, 0.7),
+                        //vertical.exactVertical(vertSpeciman, 0.6),
                         new SequentialAction(
-                                new SleepAction(0.5),
-                                flowerArm.flowerArmUp(flowerDrop),
+                                //new SleepAction(0.5),
+                                //flowerArm.flowerArmUp(flowerGrab),
                                 firstSpeciman
                         )
                 ),
-                vertical.verticalLiftDown(vertGrab, 0.7),
-                vertical.verticalLiftStay(0.01),
-                claw.clawOpen(),
-                new SleepAction(0.5),
-                driveToFirstSample,
-                vertical.verticalLiftDown(vertLow, 0.7),
-                vertical.verticalLiftStay(0.01),
-                driveToHumanPlayer,
-                driveToThirdSample,
-                thirdSampleDriveToSample,
-                claw.clawClose(),
-                new SleepAction(0.5),
-                vertical.verticalLiftUp(vertSpeciman, 0.7),
-                new SleepAction(0.5),
-                secondSpeciman,
-                vertical.verticalLiftDown(vertGrab, 0.7),
-                vertical.verticalLiftStay(0.01),
-                new SleepAction(0.7),
-                claw.clawOpen()
+                //claw.clawOpen(),
+                new SleepAction(0.2),
+                new ParallelAction(
+                    driveToFirstSample
+                    //flowerArm.flowerArmUp(flowerDrop),
+                    //vertical.verticalLiftDown(vertLow, 0.7),
+                    //vertical.verticalLiftStay(0.01)
+                    )
+//                driveToHumanPlayer,
+//                driveToThirdSample,
+//                thirdSampleDriveToSample,
+//                claw.clawClose(),
+//                new SleepAction(0.5),
+//                vertical.verticalLiftUp(vertSpeciman, 0.7),
+//                new SleepAction(0.5),
+//                secondSpeciman,
+//                vertical.verticalLiftDown(vertGrab, 0.7),
+//                vertical.verticalLiftStay(0.01),
+//                new SleepAction(0.7),
+//                claw.clawOpen()
                 );
     }
 }
