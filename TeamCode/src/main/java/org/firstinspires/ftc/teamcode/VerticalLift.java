@@ -41,8 +41,8 @@ public class VerticalLift {
             if (!initialized) {
                 motorVerticalLeft.setTargetPosition(startPos + ticks);
                 motorVerticalRight.setTargetPosition(startPos + ticks);
-                motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setPower(power);
                 motorVerticalRight.setPower(power);
                 initialized = true;
@@ -54,8 +54,6 @@ public class VerticalLift {
             if (pos < ticks) {
                 return true;
             } else {
-                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setPower(0.001);
                 motorVerticalRight.setPower(0.001);
                 return false;

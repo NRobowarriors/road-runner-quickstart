@@ -38,7 +38,7 @@ public final class HailRight extends LinearOpMode {
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
     private int vertSpeciman = 495;
-    private int vertGrab = 1090;
+    private int vertGrab = 416;
     private int vertLow = 357;
     private double wristDrop = 0.84;
     private double flowerDrop = 1;
@@ -96,8 +96,8 @@ public final class HailRight extends LinearOpMode {
         intakeTilt.tiltUp();
         double specimanX = -27.5;
         double specimanY = 0;
-        double firstSampleX = -25;
-        double firstSampleY = 30;
+        double HumanPlayerX = -6.5;
+        double HumanPlayerY = 26.5;
         double secondSampleDriveX = -46;
         double secondSampleDriveY = 40;
         double sampleHumanX = -10;
@@ -114,51 +114,44 @@ public final class HailRight extends LinearOpMode {
                 .splineTo(new Vector2d(-23, 16), ninety)
                 .splineTo(new Vector2d(-40,26),turn)
                 .splineToConstantHeading(new Vector2d(-50, 38), turn)
-                .splineToConstantHeading(new Vector2d(-16,39),turn)
+                .splineToConstantHeading(new Vector2d(-16,38),turn)
                 //.lineToX(-12)
                 .build();
-        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(secondSampleDriveX, secondSampleDriveY, turn))
-                .strafeToLinearHeading(new Vector2d(sampleHumanX, secondSampleDriveY ), turn)
-                .build();
+//        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(secondSampleDriveX, secondSampleDriveY, turn))
+//                .strafeToLinearHeading(new Vector2d(sampleHumanX, secondSampleDriveY ), turn)
+//                .build();
         Action driveToSecondSample = drive.actionBuilder(new Pose2d(-16,39, turn))
                 .splineToConstantHeading(new Vector2d(-40, 39), turn)
                 .splineToConstantHeading(new Vector2d(-50, 47), turn)
-                .splineToConstantHeading(new Vector2d(-16, 48), turn)
+                .splineToConstantHeading(new Vector2d(-16, 47), turn)
                 //.lineToX(-12)
                 .build();
         Action driveToThirdSample = drive.actionBuilder(new Pose2d(-16, 48, turn))
                 .splineToConstantHeading(new Vector2d(-40, 48), turn)
-                .splineToConstantHeading(new Vector2d(-50,53.5),turn)
+                .splineToConstantHeading(new Vector2d(-50,54.5),turn)
                 //.splineToConstantHeading(new Vector2d(-16,53.5),turn)
-                .lineToX(-6)
+                .lineToX(-6.5)
                 .build();
-        Action secondSpeciman = drive.actionBuilder(new Pose2d(sampleHumanX + 2.7, shiftAtTopY, turn))
-                .strafeToLinearHeading(new Vector2d(specimanX, specimanY - 3), zero)
+        Action secondSpeciman = drive.actionBuilder(new Pose2d(-6.5, 54.5, turn))
+                //.strafeToLinearHeading(new Vector2d(specimanX, specimanY - 3), zero)
+                //.splineTo(new Vector2d(specimanX, specimanY - 3), Math.toRadians(135))
+                .splineToLinearHeading(new Pose2d(specimanX, specimanY - 3, zero), Math.toRadians(135))
                 .build();
-//        Action thirdSampleTurnToBucket = drive.actionBuilder(new Pose2d(secondSampleX,secondSampleY, ninedy))
-//                .turn((-fortyFive))
-//                .build();
-//        Action thirdSampleDriveToBucket = drive.actionBuilder(new Pose2d(secondSampleX,secondSampleY, fortyFive))
-//                .strafeToLinearHeading(new Vector2d(bucketX, bucketY), fortyFive)
-//                .build();
-//        Action fourthSampleDriveToSample = drive.actionBuilder(new Pose2d(bucketX, bucketY, fortyFive))
-//                .strafeToLinearHeading(new Vector2d(thirdSampleX, thridSampleY), Math.toRadians(112))
-//                .build();
-//        Action fourthSamplePickUpDrive = drive.actionBuilder(new Pose2d(thirdSampleX, thridSampleY, Math.toRadians(112)))
-//                .splineToConstantHeading(new Vector2d(thirdSampleX, thridSampleY + 4), Math.toRadians(112))
-//                .build();
-//        Action fourthSampleTurnToBucket = drive.actionBuilder(new Pose2d(thirdSampleX,thridSampleY + 4, Math.toRadians(110)))
-//                .turn( Math.toRadians(-65))
-//                .build();
-//        Action fourthSampleDriveToBucket = drive.actionBuilder(new Pose2d(thirdSampleX,thridSampleY + 4, fortyFive))
-//                .strafeToLinearHeading(new Vector2d(bucketX, bucketY), fortyFive)
-//                .build();
-//        Action moveToHang = drive.actionBuilder(new Pose2d(bucketX,bucketY, fortyFive))
-//                .strafeToLinearHeading(new Vector2d(0, 54), Math.toRadians(180))
-//                .build();
-//        Action moveBackToHang = drive.actionBuilder(new Pose2d(0,54, Math.toRadians(180)))
-//                .splineToConstantHeading(new Vector2d(6, 54), Math.toRadians(180))
-//                .build();
+        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(specimanX,specimanY - 3, zero))
+                .strafeToLinearHeading(new Vector2d(HumanPlayerX, HumanPlayerY), turn)
+                .build();
+        Action thirdSpeciman = drive.actionBuilder(new Pose2d(HumanPlayerX, HumanPlayerY, turn))
+                .strafeToLinearHeading(new Vector2d(specimanX, specimanY - 6), zero)
+                .build();
+        Action driveToHumanPlayer2 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 6, zero))
+                .strafeToLinearHeading(new Vector2d(HumanPlayerX, HumanPlayerY), turn)
+                .build();
+        Action fourthSpeciman = drive.actionBuilder(new Pose2d(HumanPlayerX, HumanPlayerY, turn))
+                .strafeToLinearHeading(new Vector2d(specimanX, specimanY - 9), zero)
+                .build();
+        Action driveToHumanPlayer3 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 9, zero))
+                .strafeToLinearHeading(new Vector2d(HumanPlayerX, HumanPlayerY), turn)
+                .build();
         full = new SequentialAction(
                 //First drive
                 new ParallelAction(
@@ -167,7 +160,7 @@ public final class HailRight extends LinearOpMode {
                         intakeTilt.tiltUp(),
                         new SequentialAction(
                                 new SleepAction(0.5),
-                                flowerArm.flowerArmUp(flowerGrab),
+                                //flowerArm.flowerArmUp(flowerGrab),
                                 firstSpeciman
                         )
                 ),
@@ -176,24 +169,41 @@ public final class HailRight extends LinearOpMode {
                 new ParallelAction(
                     driveToFirstSample,
                     new SequentialAction(
-                            new SleepAction(0.5),
-                            flowerArm.flowerArmUp(flowerMid)
+                            new SleepAction(0.5)
+                            //flowerArm.flowerArmUp(flowerMid)
                     ),
                     vertical.verticalLiftDown(0, 0.7)
-//                    vertical.verticalLiftStay(0.01)
                 ),
                 driveToSecondSample,
-                driveToThirdSample
-//                thirdSampleDriveToSample,
-//                claw.clawClose(),
+                new ParallelAction(
+                    driveToThirdSample,
+                    //flowerArm.flowerArmUp(flowerDrop),
+                    new SequentialAction(
+                        vertical.exactVertical(vertGrab, 0.7),
+                        vertical.verticalLiftStay(0.01)
+                    )
+                ),
+                claw.clawClose(),
+                new SleepAction(0.3),
+                secondSpeciman,
+                new SleepAction(0.2),
+                driveToHumanPlayer,
+                new SleepAction(0.3),
+                thirdSpeciman,
+                new SleepAction(0.2),
+                driveToHumanPlayer2,
+                new SleepAction(0.3),
+                fourthSpeciman,
+                new SleepAction(0.2),
+                driveToHumanPlayer3,
 //                new SleepAction(0.5),
-//                vertical.exactVertical(vertSpeciman, 0.7),
 //                new SleepAction(0.5),
 //                secondSpeciman,
 //                vertical.verticalLiftDown(vertGrab, 0.7),
 //                vertical.verticalLiftStay(0.01),
 //                new SleepAction(0.7),
 //                claw.clawOpen()
+                new SleepAction(5)
                 );
     }
 }
