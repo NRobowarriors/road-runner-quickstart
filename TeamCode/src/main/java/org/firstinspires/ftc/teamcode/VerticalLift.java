@@ -143,7 +143,7 @@ public class VerticalLift {
             packet.put("verticalPos", pos);
             telemetry.addData("vertical Pos", pos);
             telemetry.update();
-            if (pos != ticks) {
+            if (pos < ticks - 10 || pos > ticks + 10) {
                 return true;
             } else {
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);

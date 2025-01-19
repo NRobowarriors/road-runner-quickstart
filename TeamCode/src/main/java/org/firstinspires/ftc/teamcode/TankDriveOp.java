@@ -275,12 +275,12 @@ public class TankDriveOp extends OpMode {
                 intakeArm.setPosition(intakeArm.getPosition() - 0.02);
             }
             if(gamepad2.left_stick_y > 0.25 ){
-                motorVerticalLeft.setPower(-0.7);
-                motorVerticalRight.setPower(-0.7);
+                motorVerticalLeft.setPower(-1);
+                motorVerticalRight.setPower(-1);
             }
             else if(gamepad2.left_stick_y < -0.25){
-                motorVerticalRight.setPower(0.7);
-                motorVerticalLeft.setPower(0.7);
+                motorVerticalRight.setPower(1);
+                motorVerticalLeft.setPower(1);
             }
             else{
                 motorVerticalRight.setPower(0.001);
@@ -289,13 +289,13 @@ public class TankDriveOp extends OpMode {
 
             if (gamepad2.right_stick_y > 0.25) {
                 if (armUpFlowersR.getPosition() > 0) {
-                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() - 0.014);
-                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() - 0.014);
+                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() - 0.028);
+                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() - 0.028);
                 }
             } else if (gamepad2.right_stick_y < -0.25) {
                 if (armUpFlowersR.getPosition() < 1.0) {
-                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() + 0.014);
-                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() + 0.014);
+                    armUpFlowersR.setPosition(armUpFlowersR.getPosition() + 0.028);
+                    armDownFlowersL.setPosition(armDownFlowersL.getPosition() + 0.028);
                 }
             }
 
