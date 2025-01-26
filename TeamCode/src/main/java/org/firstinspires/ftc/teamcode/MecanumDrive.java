@@ -65,29 +65,28 @@ public final class MecanumDrive {
 
         // drive model parameters
         public double inPerTick = 0.0019789560022612;//0.0003149606;//0.0093;
-        public double lateralInPerTick = 0.0015825832612365;//0.0015872738017706433;//0.0015731708908882154;//0.001588601600629936;//0.0015812867506575143;
-        //0.00700425697497388;//0.007068649797520015;//0.006926913793457257;// 0.006962913570466004;//0.007058550737511971;
+        public double lateralInPerTick = 0.0015825832612365;//0.0015556537788247685, 0.0015513382335283204
         public double trackWidthTicks = 6468.336859524601;
         // 6425.3137903738045;//6364.966622264682;//6368.078940245699;//6463.059297446085;//6505.150301538752;
 
         // feedforward parameters (in tick units)
-        public double kS =  1.4919122732190910;//1.437123839919515;//1.5434144847127786;//1.4349626430159672;//Try #1 1.5521481252281033;
-        public double kV = 0.0003540370989848;//0.00035357766659458047;//0.0003512039322607038;//0.0003562430759129394;//Try #1 0.0003551237211713735;
-        public double kA = 0.00006;
+        public double kS =  1.3889808464;//1.362588401941926, 1.4154993130073552,, 1.3888548244257288
+        public double kV = 0.0003511043;//0.0003504181745912743, 0.000351265146381617, 0.0003516298736304965
+        public double kA = 0.000051;
 
         // path profile parameters (in inches)
-        public double maxWheelVel = 65;//50
+        public double maxWheelVel = 50;//65
         public double minProfileAccel = -30;
-        public double maxProfileAccel = 75;//50
+        public double maxProfileAccel = 50;//75
 
         // turn profile parameters (in radians)
         public double maxAngVel = Math.PI; // shared with path
         public double maxAngAccel = Math.PI;
 
         // path controller gains
-        public double axialGain = 3.48;
-        public double lateralGain = 11;
-        public double headingGain = 5.75; // shared with turn
+        public double axialGain = 10;//3.48
+        public double lateralGain = 14.5;//3.48
+        public double headingGain = 14; // shared with turn 5.75
 
         public double axialVelGain = 0.0;
         public double lateralVelGain = 0.0;

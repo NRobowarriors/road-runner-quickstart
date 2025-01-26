@@ -97,7 +97,7 @@ public final class HailRight extends LinearOpMode {
         double specimanX = -27.5;
         double specimanY = 0;
         double HumanPlayerX = -7;
-        double HumanPlayerY = 27;
+        double HumanPlayerY = 28;
         double secondSampleDriveX = -46;
         double secondSampleDriveY = 40;
         double sampleHumanX = -10;
@@ -108,20 +108,21 @@ public final class HailRight extends LinearOpMode {
         double turn = Math.toRadians(180);
         double ninety = Math.toRadians(90);
         Action firstSpeciman = drive.actionBuilder(beginPose)
-                .strafeToLinearHeading(new Vector2d(specimanX - 0.5, specimanY), zero)
+                .strafeToLinearHeading(new Vector2d(specimanX - 2.5, specimanY), zero)
                 .build();
-        Action driveToFirstSample = drive.actionBuilder(new Pose2d(specimanX - 0.25, specimanY, zero))
+        Action driveToFirstSample = drive.actionBuilder(new Pose2d(specimanX - 2.5, specimanY, zero))
                 .splineToSplineHeading(new Pose2d(-20,13, Math.toRadians(180)),Math.toRadians(90)) //try -90 or 90
-                .splineToConstantHeading(new Vector2d(-50,36),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-5,36),Math.toRadians(0))
-                //.splineToConstantHeading(new Vector2d(-38,35),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-54,41),Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-5, 41), Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-48,54),Math.toRadians(90)) //try 45 or -45
+                .splineToConstantHeading(new Vector2d(-50,34),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-11,34),Math.toRadians(0))
+                //.lineToX(-11)
+                .splineToConstantHeading(new Vector2d(-52,41),Math.toRadians(45))
+                .splineToConstantHeading(new Vector2d(-11, 41), Math.toRadians(0))
+                //.lineToX(-11)
+                .splineToConstantHeading(new Vector2d(-48,54),Math.toRadians(0)) //try 45 or -45
                 //.splineToConstantHeading(new Vector2d(-8, 54), Math.toRadians(0)) //try -70
                 .build();
         Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(-48, 53, turn))
-                .lineToX(-7.5)
+                .lineToX(-6.5)
                 .build();
         Action secondSpeciman = drive.actionBuilder(new Pose2d(-7.5, 53, turn))
                 .splineToLinearHeading(new Pose2d(specimanX, specimanY - 3, zero), Math.toRadians(-135))
