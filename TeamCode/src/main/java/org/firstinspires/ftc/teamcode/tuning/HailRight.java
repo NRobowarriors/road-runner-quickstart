@@ -112,16 +112,16 @@ public final class HailRight extends LinearOpMode {
                 .build();
         Action driveToFirstSample = drive.actionBuilder(new Pose2d(specimanX - 2.5, specimanY, zero))
                 .splineToSplineHeading(new Pose2d(-20,13, Math.toRadians(180)),Math.toRadians(90)) //try -90 or 90
-                .splineToConstantHeading(new Vector2d(-50,34),Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(-11,34),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-50,35),Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-10,35),Math.toRadians(0))
                 //.lineToX(-11)
                 .splineToConstantHeading(new Vector2d(-52,41),Math.toRadians(45))
-                .splineToConstantHeading(new Vector2d(-11, 41), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-10, 41), Math.toRadians(0))
                 //.lineToX(-11)
                 .splineToConstantHeading(new Vector2d(-48,54),Math.toRadians(0)) //try 45 or -45
                 //.splineToConstantHeading(new Vector2d(-8, 54), Math.toRadians(0)) //try -70
                 .build();
-        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(-48, 53, turn))
+        Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(-48, 54, turn))
                 .lineToX(-6.5)
                 .build();
         Action secondSpeciman = drive.actionBuilder(new Pose2d(-7.5, 53, turn))
@@ -191,7 +191,10 @@ public final class HailRight extends LinearOpMode {
                 new SleepAction(0.1),
                 new ParallelAction(
                         driveToHumanPlayer1,
-                        flowerArm.flowerArmUp(flowerDrop),
+                        new SequentialAction(
+                            new SleepAction(0.7),
+                            flowerArm.flowerArmUp(flowerDrop)
+                        ),
                         new SequentialAction(
                                 vertical.exactVertical(vertGrab, 0.7),
                                 vertical.verticalLiftStay(0.001)
@@ -212,7 +215,10 @@ public final class HailRight extends LinearOpMode {
                 new SleepAction(0.1),
                 new ParallelAction(
                         driveToHumanPlayer2,
-                        flowerArm.flowerArmUp(flowerDrop),
+                        new SequentialAction(
+                            new SleepAction(0.7),
+                            flowerArm.flowerArmUp(flowerDrop)
+                        ),
                         new SequentialAction(
                                 vertical.exactVertical(vertGrab, 0.7),
                                 vertical.verticalLiftStay(0.001)
@@ -233,7 +239,10 @@ public final class HailRight extends LinearOpMode {
                 new SleepAction(0.1),
                 new ParallelAction(
                         driveToHumanPlayer3,
-                        flowerArm.flowerArmUp(flowerDrop),
+                        new SequentialAction(
+                            new SleepAction(0.7),
+                            flowerArm.flowerArmUp(flowerDrop)
+                        ),
                         new SequentialAction(
                                 vertical.exactVertical(vertGrab, 0.7),
                                 vertical.verticalLiftStay(0.001)

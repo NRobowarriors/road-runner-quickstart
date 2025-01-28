@@ -163,14 +163,16 @@ public final class BlueLeft extends LinearOpMode {
                         vertical.verticalLiftDown(vertMid, 0.5),
                         flowerArm.flowerArmDown(flowerMid),
                         wrist.wristDown(wristGrab),
-                        secondSampleDriveToSample,
-                        intakeArm.intakeArmOut()
+                        intakeArm.intakeArmOut(),
+                        new SequentialAction(
+                                secondSampleDriveToSample,
+                                intakeSuck.intakeSuckIn(),
+                                new SleepAction(0.2),
+                                intakeTilt.tiltDown(),
+                                secondSamplePickUpDrive
+                        )
                 ),
-                new SleepAction(0.35),
-                intakeSuck.intakeSuckIn(),
                 //Pick up 2nd Sample
-                intakeTilt.tiltDown(),
-                secondSamplePickUpDrive,
                 new SleepAction(0.4),
                 intakeSuck.intakeSuckInStop(),
                 //Bring sample to Center
@@ -202,13 +204,15 @@ public final class BlueLeft extends LinearOpMode {
                         vertical.verticalLiftDown(vertMid, 0.5),
                         flowerArm.flowerArmDown(flowerGrab),
                         wrist.wristDown(wristGrab),
-                        thirdSampleDriveToSample,
-                        intakeArm.intakeArmOut()
+                        intakeArm.intakeArmOut(),
+                        new SequentialAction(
+                                thirdSampleDriveToSample,
+                                intakeSuck.intakeSuckIn(),
+                                new SleepAction(0.2),
+                                intakeTilt.tiltDown(),
+                                thirdSamplePickUpDrive
+                        )
                 ),
-                intakeSuck.intakeSuckIn(),
-                new SleepAction(0.35),
-                intakeTilt.tiltDown(),
-                thirdSamplePickUpDrive,
                 new SleepAction(0.2),
                 intakeSuck.intakeSuckInStop(),
 
@@ -239,13 +243,15 @@ public final class BlueLeft extends LinearOpMode {
                         vertical.verticalLiftDown(vertMid, 0.5),
                         flowerArm.flowerArmDown(flowerGrab),
                         wrist.wristDown(wristGrab),
-                        fourthSampleDriveToSample,
                         intakeArm.intakeArmOut(),
-                        intakeSuck.intakeSuckIn()
+                        new SequentialAction(
+                                fourthSampleDriveToSample,
+                                intakeSuck.intakeSuckIn(),
+                                new SleepAction(0.2),
+                                intakeTilt.tiltDown(),
+                                fourthSamplePickUpDrive
+                        )
                 ),
-                new SleepAction(0.35),
-                intakeTilt.tiltDown(),
-                fourthSamplePickUpDrive,
                 new SleepAction(0.4),
                 intakeSuck.intakeSuckInStop(),
                 //Sample to Center

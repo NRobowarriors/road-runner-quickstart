@@ -30,7 +30,7 @@ public class TankDriveOp extends OpMode {
         private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
 
-    private boolean ishc = true, iswall = false, ishb = false, islb = false, isdown = false;
+    private boolean ishc = false, iswall = false, ishb = false, islb = false, isdown = false;
     private boolean mecanumDriveMode = true, coastMotors = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
     int buffer = 10;
@@ -155,62 +155,68 @@ public class TankDriveOp extends OpMode {
         if(ishc) {
             motorVerticalLeft.setTargetPosition(495);
             motorVerticalRight.setTargetPosition(495);
-            if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
-                motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                motorVerticalLeft.setPower(0.5);
-                motorVerticalRight.setPower(0.5);
-            }
-            else {
-                armDownFlowersL.setPosition(0.6572);
-                armUpFlowersR.setPosition(0.6572);
-                motorVerticalLeft.setPower(0.001);
-                motorVerticalRight.setPower(0.001);
-                clawWrist.setPosition(0.9);
-                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                ishc = false;
-            }
-        }
-            else if (ishb) {
-                armDownFlowersL.setPosition(0.9);
-                armUpFlowersR.setPosition(0.9);
-                clawWrist.setPosition(0.9);
-                motorVerticalLeft.setTargetPosition(1760);
-                motorVerticalRight.setTargetPosition(1760);
-                if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                    motorVerticalLeft.setPower(1);
-                    motorVerticalRight.setPower(1);
-                }
-                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                ishb = false;
-            }
-        else if (islb) {
-            armDownFlowersL.setPosition(0.9);
-            armUpFlowersR.setPosition(0.9);
+            armDownFlowersL.setPosition(0.6572);
+            armUpFlowersR.setPosition(0.6572);
+            motorVerticalLeft.setPower(0.001);
+            motorVerticalRight.setPower(0.001);
             clawWrist.setPosition(0.9);
-            motorVerticalLeft.setTargetPosition(900);
-            motorVerticalRight.setTargetPosition(900);
+            motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
                     motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             }
-            motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            islb = false;
+            else {
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                ishc = false;
+            }
         }
-            else if (iswall) {
-                armDownFlowersL.setPosition(1);
-                armUpFlowersR.setPosition(1);
-                motorVerticalLeft.setTargetPosition(375);
-                motorVerticalRight.setTargetPosition(375);
-                if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
+        else if (ishb) {
+            armDownFlowersL.setPosition(0.64);
+            armUpFlowersR.setPosition(0.64);
+            clawWrist.setPosition(0.9);
+            motorVerticalLeft.setTargetPosition(1760);
+            motorVerticalRight.setTargetPosition(1760);
+            motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
+                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+                motorVerticalLeft.setPower(1);
+                motorVerticalRight.setPower(1);
+            }
+            else {
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                ishb = false;
+            }
+        }
+        else if (islb) {
+            armDownFlowersL.setPosition(0.64);
+            armUpFlowersR.setPosition(0.64);
+            clawWrist.setPosition(0.9);
+            motorVerticalLeft.setTargetPosition(900);
+            motorVerticalRight.setTargetPosition(900);
+            motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
+                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+                motorVerticalLeft.setPower(1);
+                motorVerticalRight.setPower(1);
+            }
+            else {
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                islb = false;
+            }
+        }
+        else if (iswall) {
+            armDownFlowersL.setPosition(1);
+            armUpFlowersR.setPosition(1);
+            motorVerticalLeft.setTargetPosition(375);
+            motorVerticalRight.setTargetPosition(375);
+            if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
@@ -227,24 +233,28 @@ public class TankDriveOp extends OpMode {
                     motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     iswall = false;
                 }
-            }
-            else if (isdown){
+        }
+        else if (isdown) {
             armDownFlowersL.setPosition(0);
             armUpFlowersR.setPosition(0);
-            clawWrist.setPosition(0.9);
-            motorVerticalLeft.setTargetPosition(10);
-            motorVerticalRight.setTargetPosition(10);
+            clawWrist.setPosition(0.84);
+            claw.setPosition(1);
+            motorVerticalLeft.setTargetPosition(0);
+            motorVerticalRight.setTargetPosition(0);
+            motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
                     motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
+            } else {
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                isdown = false;
             }
-            motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            isdown = false;
-                }
+        }
 
-        if(!ishb && !iswall && !islb && !ishc && isdown){
+        if(!ishb && !iswall && !islb && !ishc && !isdown){
             if (gamepad2.left_trigger > 0.25) {
                 intakeWheelLeft.setPower(0.5);
                 intakeWheelRight.setPower(-0.5);
