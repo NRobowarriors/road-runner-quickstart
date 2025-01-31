@@ -37,13 +37,14 @@ public final class HailRight extends LinearOpMode {
     private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
-    private int vertSpeciman = 495;
+    private int vertSpeciman = 505;
     private int vertGrab = 375;//416;
     private int vertLow = 357;
     private double wristDrop = 0.84;
     private double flowerDrop = 1;
     private double wristGrab = 0.9;
     private double flowerGrab = 0.6572;
+    private double flowerBackMid = 0.8;
     private double flowerMid = 0.2;
     private Pose2d beginPose = new Pose2d(0, 0, 0);
     MecanumDrive drive;
@@ -96,8 +97,8 @@ public final class HailRight extends LinearOpMode {
         intakeTilt.tiltUp();
         double specimanX = -27.5;
         double specimanY = 0;
-        double HumanPlayerX = -7;
-        double HumanPlayerY = 28;
+        double HumanPlayerX = -6;
+        double HumanPlayerY = 28.5;
         double secondSampleDriveX = -46;
         double secondSampleDriveY = 40;
         double sampleHumanX = -10;
@@ -118,32 +119,32 @@ public final class HailRight extends LinearOpMode {
                 .splineToConstantHeading(new Vector2d(-52,41),Math.toRadians(45))
                 .splineToConstantHeading(new Vector2d(-10, 41), Math.toRadians(0))
                 //.lineToX(-11)
-                .splineToConstantHeading(new Vector2d(-48,54),Math.toRadians(0)) //try 45 or -45
+                .splineToConstantHeading(new Vector2d(-48,53.5),Math.toRadians(0)) //try 45 or -45
                 //.splineToConstantHeading(new Vector2d(-8, 54), Math.toRadians(0)) //try -70
                 .build();
         Action driveToHumanPlayer = drive.actionBuilder(new Pose2d(-48, 54, turn))
                 .lineToX(-6.5)
                 .build();
         Action secondSpeciman = drive.actionBuilder(new Pose2d(-7.5, 53, turn))
-                .splineToLinearHeading(new Pose2d(specimanX, specimanY - 3, zero), Math.toRadians(-135))
+                .splineToLinearHeading(new Pose2d(specimanX, specimanY - 2, zero), Math.toRadians(-135))
                 .build();
-        Action driveToHumanPlayer1 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 5, zero))
+        Action driveToHumanPlayer1 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 2, zero))
                 .splineToLinearHeading(new Pose2d(HumanPlayerX, HumanPlayerY, turn), Math.toRadians(0))
                 .build();
         Action thirdSpeciman = drive.actionBuilder(new Pose2d(HumanPlayerX, HumanPlayerY, turn))
                 .splineToLinearHeading(new Pose2d(specimanX, specimanY - 6, zero), Math.toRadians(-90))
                 .build();
-        Action driveToHumanPlayer2 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 8, zero))
+        Action driveToHumanPlayer2 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 6, zero))
                 .splineToLinearHeading(new Pose2d(HumanPlayerX, HumanPlayerY, turn), Math.toRadians(0))
                 .build();
         Action fourthSpeciman = drive.actionBuilder(new Pose2d(HumanPlayerX, HumanPlayerY, turn))
                 .splineToLinearHeading(new Pose2d(specimanX, specimanY - 9, zero), Math.toRadians(-90))
                 .build();
-        Action driveToHumanPlayer3 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 8, zero))
+        Action driveToHumanPlayer3 = drive.actionBuilder(new Pose2d(specimanX,specimanY - 9, zero))
                 .splineToLinearHeading(new Pose2d(HumanPlayerX, HumanPlayerY, turn), Math.toRadians(0))
                 .build();
         Action fifthSpeciman = drive.actionBuilder(new Pose2d(HumanPlayerX, HumanPlayerY, turn))
-                .splineToLinearHeading(new Pose2d(specimanX, specimanY - 9, zero), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(specimanX - 0.5, specimanY - 9, zero), Math.toRadians(-90))
                 .build();
 
         full = new SequentialAction(
@@ -192,6 +193,7 @@ public final class HailRight extends LinearOpMode {
                 new ParallelAction(
                         driveToHumanPlayer1,
                         new SequentialAction(
+                            flowerArm.flowerArmUp(flowerBackMid),
                             new SleepAction(0.7),
                             flowerArm.flowerArmUp(flowerDrop)
                         ),
@@ -216,6 +218,7 @@ public final class HailRight extends LinearOpMode {
                 new ParallelAction(
                         driveToHumanPlayer2,
                         new SequentialAction(
+                            flowerArm.flowerArmUp(flowerBackMid),
                             new SleepAction(0.7),
                             flowerArm.flowerArmUp(flowerDrop)
                         ),
@@ -240,6 +243,7 @@ public final class HailRight extends LinearOpMode {
                 new ParallelAction(
                         driveToHumanPlayer3,
                         new SequentialAction(
+                            flowerArm.flowerArmUp(flowerBackMid),
                             new SleepAction(0.7),
                             flowerArm.flowerArmUp(flowerDrop)
                         ),

@@ -23,8 +23,8 @@ public class Intake {
         }
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            intakeWheelLeft.setPower(0.4);
-            intakeWheelRight.setPower(-0.4);
+            intakeWheelLeft.setPower(0.5);
+            intakeWheelRight.setPower(-0.5);
             return false;
         }
     }
