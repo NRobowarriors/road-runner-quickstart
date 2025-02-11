@@ -37,8 +37,8 @@ public final class BlueLeft extends LinearOpMode {
     private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
-    private int vertHigh = 1760;
-    private int vertMid = 300;
+    private int vertHigh = 2265;
+    private int vertMid = 400;
     private int vertLow = 50;
     private double wristDrop = 0.89;
     private double flowerDrop = 0.64;
@@ -95,7 +95,7 @@ public final class BlueLeft extends LinearOpMode {
         double firstSampleX = -16.25;
         double firstSampleY = 10.25;
         double secondSampleX = -26.5;
-        double secondSampleY = 10.25;
+        double secondSampleY = 9.25;
         double thirdSampleX = -27.25;
         double thridSampleY = 13.25;
         double ninedy  = Math.toRadians(90);
@@ -119,23 +119,23 @@ public final class BlueLeft extends LinearOpMode {
                 .strafeToLinearHeading(new Vector2d(secondSampleX, secondSampleY), ninedy)
                 .build();
         Action thirdSamplePickUpDrive = drive.actionBuilder(new Pose2d(secondSampleX, secondSampleY, ninedy))
-                //.splineToConstantHeading(new Vector2d(secondSampleX, secondSampleY + 4), ninedy)
-                .lineToY(secondSampleY + 4)
+                .splineToConstantHeading(new Vector2d(secondSampleX + 1.5, secondSampleY + 5.5), ninedy)
+                //.lineToY(secondSampleY + 6)
                 .build();
-        Action thirdSampleTurnToBucket = drive.actionBuilder(new Pose2d(secondSampleX,secondSampleY, ninedy))
+        Action thirdSampleTurnToBucket = drive.actionBuilder(new Pose2d(secondSampleX + 1.5,secondSampleY+5.5, ninedy))
                 .turn((-fortyFive))
                 .build();
-        Action thirdSampleDriveToBucket = drive.actionBuilder(new Pose2d(secondSampleX,secondSampleY, fortyFive))
+        Action thirdSampleDriveToBucket = drive.actionBuilder(new Pose2d(secondSampleX + 1.5,secondSampleY + 5.5 , fortyFive))
                 .strafeToLinearHeading(new Vector2d(bucketX, bucketY), fortyFive)
                 .build();
         Action fourthSampleDriveToSample = drive.actionBuilder(new Pose2d(bucketX, bucketY, fortyFive))
-                .strafeToLinearHeading(new Vector2d(thirdSampleX, thridSampleY), Math.toRadians(112))
+                .strafeToLinearHeading(new Vector2d(thirdSampleX - 1, thridSampleY), Math.toRadians(110))
                 .build();
-        Action fourthSamplePickUpDrive = drive.actionBuilder(new Pose2d(thirdSampleX, thridSampleY, Math.toRadians(112)))
-                .splineToConstantHeading(new Vector2d(thirdSampleX, thridSampleY + 4), Math.toRadians(112))
+        Action fourthSamplePickUpDrive = drive.actionBuilder(new Pose2d(thirdSampleX, thridSampleY, Math.toRadians(110)))
+                .splineToConstantHeading(new Vector2d(thirdSampleX, thridSampleY + 4), Math.toRadians(110))
                 .build();
         Action fourthSampleTurnToBucket = drive.actionBuilder(new Pose2d(thirdSampleX,thridSampleY + 4, Math.toRadians(110)))
-                .turn( Math.toRadians(-65))
+                .turn( Math.toRadians(-63))
                 .build();
         Action fourthSampleDriveToBucket = drive.actionBuilder(new Pose2d(thirdSampleX,thridSampleY + 4, fortyFive))
                 .strafeToLinearHeading(new Vector2d(bucketX, bucketY), fortyFive)
@@ -150,7 +150,7 @@ public final class BlueLeft extends LinearOpMode {
                 //First drive
                 new ParallelAction(
                         firstSampleBucketDrop,
-                        vertical.verticalLiftUp(vertHigh, 0.7),
+                        vertical.verticalLiftUp(vertHigh, 1),
                         new SequentialAction(
                                 new SleepAction(0.75),
                                 flowerArm.flowerArmUp(flowerDrop)
@@ -161,7 +161,7 @@ public final class BlueLeft extends LinearOpMode {
                 new SleepAction(0.5),
                 //To 2nd sample
                 new ParallelAction(
-                        vertical.verticalLiftDown(vertMid, 0.5),
+                        vertical.verticalLiftDown(vertMid, 1),
                         flowerArm.flowerArmDown(flowerMid),
                         wrist.wristDown(wristGrab),
                         secondSampleDriveToSample,
@@ -183,7 +183,7 @@ public final class BlueLeft extends LinearOpMode {
                         intakeArm.IntakeArmIn(),
                         secondSampleTurnToBucket
                 ),
-                vertical.verticalLiftDown(vertLow,0.75),
+                vertical.verticalLiftDown(vertLow,1),
                 flowerArm.flowerArmDown(flowerGrab),
                 new SleepAction(1),
                 claw.clawClose(),
@@ -192,10 +192,10 @@ public final class BlueLeft extends LinearOpMode {
                 new ParallelAction(
                         secondSampleDriveToBucket,
                         new SequentialAction(
-                                new SleepAction(0.75),
+                                new SleepAction(1),
                                 flowerArm.flowerArmUp(flowerDrop)
                         ),
-                        vertical.verticalLiftUp(vertHigh,0.8),
+                        vertical.verticalLiftUp(vertHigh,1),
                         wrist.wristUp(wristDrop)
                 ),
                 new SleepAction(0.5),
@@ -203,7 +203,7 @@ public final class BlueLeft extends LinearOpMode {
                 new SleepAction(0.5),
                 //Drive to 3rd sample
                 new ParallelAction(
-                        vertical.verticalLiftDown(vertMid, 0.5),
+                        vertical.verticalLiftDown(vertMid, 1),
                         flowerArm.flowerArmDown(flowerGrab),
                         wrist.wristDown(wristGrab),
                         thirdSampleDriveToSample,
@@ -222,7 +222,7 @@ public final class BlueLeft extends LinearOpMode {
                         intakeArm.IntakeArmIn(),
                         thirdSampleTurnToBucket
                 ),
-                vertical.verticalLiftDown(vertLow,0.75),
+                vertical.verticalLiftDown(vertLow,1),
                 new SleepAction(0.5),
                 claw.clawClose(),
                 new SleepAction(0.5),
@@ -233,14 +233,14 @@ public final class BlueLeft extends LinearOpMode {
                                 new SleepAction(0.75),
                                 flowerArm.flowerArmUp(flowerDrop)
                         ),
-                        vertical.verticalLiftUp(vertHigh,0.8),
+                        vertical.verticalLiftUp(vertHigh,1),
                         wrist.wristUp(wristDrop)
                 ),
                 new SleepAction(0.5),
                 claw.clawOpen(),
                 new SleepAction(0.5),
                 new ParallelAction(
-                        vertical.verticalLiftDown(vertMid, 0.5),
+                        vertical.verticalLiftDown(vertMid, 1),
                         flowerArm.flowerArmDown(flowerGrab),
                         wrist.wristDown(wristGrab),
                         fourthSampleDriveToSample,
@@ -259,7 +259,7 @@ public final class BlueLeft extends LinearOpMode {
                         fourthSampleTurnToBucket
                 ),
                 intakeArm.IntakeArmIn(),
-                vertical.verticalLiftDown(vertLow,0.75),
+                vertical.verticalLiftDown(vertLow,1),
                 new SleepAction(0.5),
                 claw.clawClose(),
                 new SleepAction(0.5),
@@ -270,14 +270,14 @@ public final class BlueLeft extends LinearOpMode {
                                 new SleepAction(0.75),
                                 flowerArm.flowerArmUp(flowerDrop)
                         ),
-                        vertical.verticalLiftUp(vertHigh,0.8),
+                        vertical.verticalLiftUp(vertHigh,1),
                         wrist.wristUp(wristDrop)
                 ),
                 new SleepAction(0.5),
                 claw.clawOpen(),
                 new SleepAction(0.5),
                 new ParallelAction(
-                        vertical.verticalLiftDown(vertLow, 0.5),
+                        vertical.verticalLiftDown(vertLow, 1),
                         flowerArm.flowerArmDown(0.5),
                         wrist.wristDown(wristGrab),
                         moveToHang

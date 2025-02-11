@@ -21,13 +21,13 @@ import static java.lang.Math.abs;
  * All the code aside from importing, goes within a class file - essentially telling Android Studio-
  * to run this using java
  */
-@TeleOp(name = "Tank Drive")
-public class TankDriveOp extends OpMode {
+@TeleOp(name = "Pov Drive")
+public class PovDriveOp extends OpMode {
     private ElapsedTime stopwatch = new ElapsedTime();
     //OpenColorV_4 openCv;
     private DcMotor motorLeft, motorLeft2,
             motorRight, motorRight2, motorVerticalLeft, motorVerticalRight, hang;
-        private CRServo intakeWheelRight, intakeWheelLeft;
+    private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
 
     private boolean ishc = false, iswall = false, ishb = false, islb = false, isdown = false;
@@ -219,20 +219,20 @@ public class TankDriveOp extends OpMode {
             if(motorVerticalLeft.getMode() != DcMotor.RunMode.RUN_TO_POSITION){
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                }
-                if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                        motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                    motorVerticalLeft.setPower(0.3);
-                    motorVerticalRight.setPower(0.3);
-                }
-                else {
-                    motorVerticalLeft.setPower(0.001);
-                    motorVerticalRight.setPower(0.001);
-                    clawWrist.setPosition(0.9);
-                    motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                    iswall = false;
-                }
+            }
+            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
+                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+                motorVerticalLeft.setPower(0.3);
+                motorVerticalRight.setPower(0.3);
+            }
+            else {
+                motorVerticalLeft.setPower(0.001);
+                motorVerticalRight.setPower(0.001);
+                clawWrist.setPosition(0.9);
+                motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+                iswall = false;
+            }
         }
         else if (isdown) {
             armDownFlowersL.setPosition(0);
@@ -338,30 +338,21 @@ public class TankDriveOp extends OpMode {
                 }
             }
         }
+            mecanumStrafe = gamepad1.left_stick_x;
 
-        if (abs(gamepad1.left_stick_x) > 0.15 || abs(gamepad1.right_stick_x) > 0.15) {
-            dominantXJoystick = (abs(gamepad1.left_stick_x) - abs(gamepad1.right_stick_x));
-            mecanumDriveMode = true;
-        } else {
-            mecanumDriveMode = false;
-        }
 
-        if (mecanumDriveMode) {
-            if (dominantXJoystick > 0) {
-                mecanumStrafe = gamepad1.left_stick_x;
-            } else if (dominantXJoystick < 0) {
-                mecanumStrafe = gamepad1.right_stick_x;
+            if ((gamepad1.left_stick_x) > 0.15){
+                drive(-gamepad1.left_stick_x , gamepad1.left_stick_x , gamepad1.left_stick_x , -gamepad1.left_stick_x );
+            } else {
+                drive((gamepad1.left_stick_y + -mecanumStrafe) , (gamepad1.left_stick_y + mecanumStrafe) , (gamepad1.left_stick_y + mecanumStrafe) , (gamepad1.left_stick_y + -mecanumStrafe));
             }
 
-            motorLeft.setPower((gamepad1.left_stick_y + -mecanumStrafe) / 2);
-            motorLeft2.setPower((gamepad1.left_stick_y + mecanumStrafe) / 2);
-            motorRight.setPower((gamepad1.right_stick_y + mecanumStrafe) / 2);
-            motorRight2.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2);
+            if (gamepad1.right_stick_x > 0.2 || gamepad1.right_stick_x < -0.2 ){
+                drive(-gamepad1.right_stick_x ,-gamepad1.right_stick_x , gamepad1.right_stick_x , gamepad1.right_stick_x );
+            }
 
-        } else {
-            drive(gamepad1.left_stick_y * 1, gamepad1.right_stick_y * 1);
 
-        }
+
 //        if(gamepad1.dpad_up){
 //            Hang up
 //        }
@@ -374,19 +365,26 @@ public class TankDriveOp extends OpMode {
 //end of loop opmode programing
     }
 
-        @Override
-        public void stop () {
-            telemetry.clearAll();
-            telemetry.addLine("Stopped");
-        }
+    @Override
+    public void stop () {
+        telemetry.clearAll();
+        telemetry.addLine("Stopped");
+    }
 
-        public void drive ( double left, double right){
-            motorLeft.setPower(left);
-            motorLeft2.setPower(left);
-            motorRight.setPower(right);
-            motorRight2.setPower(right);
+    public void drive ( double left, double right){
+        motorLeft.setPower(left);
+        motorLeft2.setPower(left);
+        motorRight.setPower(right);
+        motorRight2.setPower(right);
 
-        }
+    }
+    public void drive(double frontLeft, double backLeft, double frontRight, double backRight) {
+        motorLeft.setPower(frontLeft);
+        motorLeft2.setPower(backLeft);
+        motorRight.setPower(frontRight);
+        motorRight2.setPower(backRight);
+
+    }
 
 
 }
