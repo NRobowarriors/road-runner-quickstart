@@ -153,8 +153,8 @@ public class PovDriveOp extends OpMode {
         }
 
         if(ishc) {
-            motorVerticalLeft.setTargetPosition(650);
-            motorVerticalRight.setTargetPosition(650);
+            motorVerticalLeft.setTargetPosition(660);
+            motorVerticalRight.setTargetPosition(660);
             motorVerticalLeft.setPower(0.001);
             motorVerticalRight.setPower(0.001);
             armDownFlowersL.setPosition(0.6572);
@@ -222,8 +222,8 @@ public class PovDriveOp extends OpMode {
             }
             if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
                     motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                motorVerticalLeft.setPower(0.3);
-                motorVerticalRight.setPower(0.3);
+                motorVerticalLeft.setPower(1);
+                motorVerticalRight.setPower(1);
             }
             else {
                 motorVerticalLeft.setPower(0.001);
@@ -274,13 +274,7 @@ public class PovDriveOp extends OpMode {
             }
 //            if (gamepad1.right_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() + 0.008);}
 //             else if (gamepad1.left_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() - 0.008);}
-
-            if (gamepad1.right_trigger > 0.25 && intakeArm.getPosition() < 0.34) {
-                intakeArm.setPosition(intakeArm.getPosition() + 0.02);
-            } else if (gamepad1.left_trigger > 0.25 && intakeArm.getPosition() > 0.09) {
-                intakeArm.setPosition(intakeArm.getPosition() - 0.02);
-            }
-            if(gamepad2.left_stick_y > 0.25 ){
+            if(gamepad2.left_stick_y > 0.25 && motorVerticalLeft.getCurrentPosition() > 5){
                 motorVerticalLeft.setPower(-1);
                 motorVerticalRight.setPower(-1);
             }
@@ -337,6 +331,11 @@ public class PovDriveOp extends OpMode {
                     hang.setPower(1);
                 }
             }
+        }
+        if (gamepad1.right_trigger > 0.25 && intakeArm.getPosition() < 0.34) {
+            intakeArm.setPosition(intakeArm.getPosition() + 0.02);
+        } else if (gamepad1.left_trigger > 0.25 && intakeArm.getPosition() > 0.09) {
+            intakeArm.setPosition(intakeArm.getPosition() - 0.02);
         }
             mecanumStrafe = gamepad1.left_stick_x;
 

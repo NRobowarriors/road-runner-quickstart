@@ -23,7 +23,7 @@ import static java.lang.Math.abs;
  */
 @TeleOp(name = "Tank Drive")
 public class TankDriveOp extends OpMode {
-    private ElapsedTime stopwatch = new ElapsedTime();
+    //private ElapsedTime stopwatch = new ElapsedTime();
     //OpenColorV_4 openCv;
     private DcMotor motorLeft, motorLeft2,
             motorRight, motorRight2, motorVerticalLeft, motorVerticalRight, hang;
@@ -96,13 +96,14 @@ public class TankDriveOp extends OpMode {
         telemetry.addData("LeftMTR  PWR: ", motorLeft.getPower());
         telemetry.addData("RightMTR PWR: ", motorRight.getPower());
         telemetry.addData("Tilt: ", intakeTilt.getPosition());
-        telemetry.addData("time", stopwatch.time());
+        //telemetry.addData("time", stopwatch.time());
         telemetry.addData("left", motorVerticalLeft.getCurrentPosition());
         telemetry.addData("right", motorVerticalRight.getCurrentPosition());
-        telemetry.addData("left", motorVerticalLeft.getTargetPosition());
-        telemetry.addData("right", motorVerticalRight.getTargetPosition());
+        telemetry.addData("leftTarget", motorVerticalLeft.getTargetPosition());
+        telemetry.addData("rightTarget", motorVerticalRight.getTargetPosition());
         telemetry.addData("flowerR", armUpFlowersR.getPosition());
-        telemetry.addData("motorVerticalLeft",motorVerticalLeft.getCurrentPosition());
+        //telemetry.addData("motorVerticalLeft",motorVerticalLeft.getCurrentPosition());
+        //telemetry.addData("motorVerticalRight",motorVerticalRight.getCurrentPosition());
         //telemetry.addData("hang",hang.getCurrentPosition());
         telemetry.update();
         //armUpFlowersR.setPosition(flowerArmMid);
@@ -153,8 +154,8 @@ public class TankDriveOp extends OpMode {
         }
 
         if(ishc) {
-            motorVerticalLeft.setTargetPosition(650);
-            motorVerticalRight.setTargetPosition(650);
+            motorVerticalLeft.setTargetPosition(660);
+            motorVerticalRight.setTargetPosition(660);
             motorVerticalLeft.setPower(0.001);
             motorVerticalRight.setPower(0.001);
             armDownFlowersL.setPosition(0.6572);
@@ -222,8 +223,8 @@ public class TankDriveOp extends OpMode {
                 }
                 if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
                         motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
-                    motorVerticalLeft.setPower(0.3);
-                    motorVerticalRight.setPower(0.3);
+                    motorVerticalLeft.setPower(1);
+                    motorVerticalRight.setPower(1);
                 }
                 else {
                     motorVerticalLeft.setPower(0.001);
@@ -244,7 +245,9 @@ public class TankDriveOp extends OpMode {
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition()||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + 5) {
+                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + 5 ||
+                    motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition()||
+                    motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + 5) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             } else {
@@ -266,21 +269,8 @@ public class TankDriveOp extends OpMode {
                 intakeWheelRight.setPower(0);
 
             }
-            if (gamepad1.left_bumper) {
-                intakeTilt.setPosition(1);
-            }
-            if (gamepad1.right_bumper) {
-                intakeTilt.setPosition(0.75);
-            }
-//            if (gamepad1.right_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() + 0.008);}
-//             else if (gamepad1.left_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() - 0.008);}
 
-            if (gamepad1.right_trigger > 0.25 && intakeArm.getPosition() < 0.34) {
-                intakeArm.setPosition(intakeArm.getPosition() + 0.02);
-            } else if (gamepad1.left_trigger > 0.25 && intakeArm.getPosition() > 0.09) {
-                intakeArm.setPosition(intakeArm.getPosition() - 0.02);
-            }
-            if(gamepad2.left_stick_y > 0.25 ){
+            if(gamepad2.left_stick_y > 0.25 && motorVerticalLeft.getCurrentPosition() > 5){
                 motorVerticalLeft.setPower(-1);
                 motorVerticalRight.setPower(-1);
             }
@@ -338,6 +328,20 @@ public class TankDriveOp extends OpMode {
                 }
             }
         }
+        if (gamepad1.left_bumper) {
+            intakeTilt.setPosition(1);
+        }
+        if (gamepad1.right_bumper) {
+            intakeTilt.setPosition(0.75);
+        }
+//            if (gamepad1.right_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() + 0.008);}
+//             else if (gamepad1.left_trigger > 0.25) {intakeArm.setPosition(intakeArm.getPosition() - 0.008);}
+
+        if (gamepad1.right_trigger > 0.25 && intakeArm.getPosition() < 0.34) {
+            intakeArm.setPosition(intakeArm.getPosition() + 0.02);
+        } else if (gamepad1.left_trigger > 0.25 && intakeArm.getPosition() > 0.09) {
+            intakeArm.setPosition(intakeArm.getPosition() - 0.02);
+        }
 
         if (abs(gamepad1.left_stick_x) > 0.15 || abs(gamepad1.right_stick_x) > 0.15) {
             dominantXJoystick = (abs(gamepad1.left_stick_x) - abs(gamepad1.right_stick_x));
@@ -353,10 +357,10 @@ public class TankDriveOp extends OpMode {
                 mecanumStrafe = gamepad1.right_stick_x;
             }
 
-            motorLeft.setPower((gamepad1.left_stick_y + -mecanumStrafe) / 2);
-            motorLeft2.setPower((gamepad1.left_stick_y + mecanumStrafe) / 2);
-            motorRight.setPower((gamepad1.right_stick_y + mecanumStrafe) / 2);
-            motorRight2.setPower((gamepad1.right_stick_y + -mecanumStrafe) / 2);
+            motorLeft.setPower((gamepad1.left_stick_y + -mecanumStrafe));
+            motorLeft2.setPower((gamepad1.left_stick_y + mecanumStrafe));
+            motorRight.setPower((gamepad1.right_stick_y + mecanumStrafe));
+            motorRight2.setPower((gamepad1.right_stick_y + -mecanumStrafe));
 
         } else {
             drive(gamepad1.left_stick_y * 1, gamepad1.right_stick_y * 1);

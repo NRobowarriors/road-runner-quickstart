@@ -37,7 +37,7 @@ public final class HailRight extends LinearOpMode {
     private CRServo intakeWheelRight, intakeWheelLeft;
     private Servo intakeTilt, intakeArm, armUpFlowersR, armDownFlowersL, claw, clawWrist;
     private DcMotor motorVerticalLeft, motorVerticalRight;
-    private int vertSpeciman = 650;
+    private int vertSpeciman = 660;
     private int vertGrab = 500;//416;
     private int vertMid = vertGrab + 25;
     private int vertLow = 357;

@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
+import java.util.Optional;
+
 public class VerticalLift {
     private DcMotorEx motorVerticalRight, motorVerticalLeft;
     private Telemetry telemetry;
@@ -122,7 +124,9 @@ public class VerticalLift {
         private int ticks;
         private double power;
         private int startPos;
-        public exactVertical(int ticksIn, double powerIn){
+        private int buffer;
+        public exactVertical(int ticksIn, double powerIn,int bufferIn){
+            buffer = bufferIn;
             ticks = ticksIn;
             power = powerIn;
             startPos = motorVerticalLeft.getCurrentPosition();
@@ -143,7 +147,7 @@ public class VerticalLift {
             packet.put("verticalPos", pos);
             telemetry.addData("vertical Pos", pos);
             telemetry.update();
-            if (pos < ticks - 2 || pos > ticks + 2) {
+            if (pos < ticks - buffer || pos > ticks + buffer) {
                 return true;
             } else {
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -155,7 +159,10 @@ public class VerticalLift {
         }
     }
     public Action exactVertical(int ticksIn, double powerIn) {
-        return new exactVertical(ticksIn, powerIn);
+        return new exactVertical(ticksIn, powerIn, 2);
+    }
+    public Action exactVerticalWithBuffer(int ticksIn, double powerIn, int bufferIn) {
+        return new exactVertical(ticksIn, powerIn, bufferIn);
     }
 }
 
