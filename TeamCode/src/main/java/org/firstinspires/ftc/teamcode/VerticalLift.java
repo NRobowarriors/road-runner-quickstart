@@ -41,8 +41,8 @@ public class VerticalLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                motorVerticalLeft.setTargetPosition(startPos + ticks);
-                motorVerticalRight.setTargetPosition(startPos + ticks);
+                motorVerticalLeft.setTargetPosition(ticks);
+                motorVerticalRight.setTargetPosition(ticks);
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setPower(power);
@@ -104,13 +104,13 @@ public class VerticalLift {
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
-            if (!initialized) {
-                motorVerticalLeft.setPower(1 * power);
-                motorVerticalRight.setPower(1 * power);
-                initialized = true;
-            }
-            double pos = motorVerticalLeft.getCurrentPosition();
-            packet.put("verticalPos", pos);
+//            if (!initialized) {
+//                motorVerticalLeft.setPower(1 * power);
+//                motorVerticalRight.setPower(1 * power);
+//                initialized = true;
+//            }
+//            double pos = motorVerticalLeft.getCurrentPosition();
+//            packet.put("verticalPos", pos);
             return false;
         }
 
@@ -135,25 +135,30 @@ public class VerticalLift {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                motorVerticalLeft.setTargetPosition(startPos + ticks);
-                motorVerticalRight.setTargetPosition(startPos + ticks);
+                motorVerticalLeft.setTargetPosition(ticks);
+                motorVerticalRight.setTargetPosition(ticks);
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setPower(power);
                 motorVerticalRight.setPower(power);
                 initialized = true;
             }
-            int pos = motorVerticalLeft.getCurrentPosition();
-            packet.put("verticalPos", pos);
-            telemetry.addData("vertical Pos", pos);
+            int leftVert = motorVerticalLeft.getCurrentPosition();
+            int rightVert = motorVerticalRight.getCurrentPosition();
+            packet.put("verticalLeft", leftVert);
+            packet.put("verticalRight", rightVert);
+            telemetry.addData("vertical left", leftVert);
+            telemetry.addData("vertical right", rightVert);
             telemetry.update();
-            if (pos < ticks - buffer || pos > ticks + buffer) {
+            if ((leftVert < ticks - buffer || leftVert > ticks + buffer) &&
+                    (rightVert < ticks - buffer || rightVert > ticks + buffer)) {
                 return true;
             } else {
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-                motorVerticalLeft.setPower(0.001);
-                motorVerticalRight.setPower(0.001);
+                telemetry.addData("vertical left", leftVert);
+                telemetry.addData("vertical right", rightVert);
+                telemetry.update();
                 return false;
             }
         }

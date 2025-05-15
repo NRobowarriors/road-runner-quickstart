@@ -148,13 +148,13 @@ public final class Left extends LinearOpMode {
         Action firstSampleDrive = drive.actionBuilder(new Pose2d(10,19,Math.toRadians(-23)))
                 .strafeToLinearHeading(new Vector2d(16, 16.5), Math.toRadians(-23))
                 .build();
-        Action secondBucket = drive.actionBuilder(new Pose2d(10,19,Math.toRadians(-23)))
+        Action secondBucket = drive.actionBuilder(new Pose2d(16,16.5,Math.toRadians(-23)))
                 .strafeToLinearHeading(new Vector2d(12, 22.5), Math.toRadians(-10))
                 .build();
         Action secondSampleDrive = drive.actionBuilder(new Pose2d(12,22.5,Math.toRadians(-10)))
-                .strafeToLinearHeading(new Vector2d(16, 22.5), Math.toRadians(-10))
+                .strafeToLinearHeading(new Vector2d(14, 22.5), Math.toRadians(-10))
                 .build();
-        Action thridBucket = drive.actionBuilder(new Pose2d(16,22.5,Math.toRadians(-10)))
+        Action thridBucket = drive.actionBuilder(new Pose2d(14,22.5,Math.toRadians(-10)))
                 .strafeToLinearHeading(new Vector2d(12, 22.5), Math.toRadians(-10))
                 .build();
         Action fourthSampleDrive = drive.actionBuilder(new Pose2d(12,22.5,Math.toRadians(-10)))

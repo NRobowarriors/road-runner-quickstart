@@ -33,7 +33,7 @@ public class TankDriveOp extends OpMode {
     private boolean ishc = false, iswall = false, ishb = false, islb = false, isdown = false;
     private boolean mecanumDriveMode = true, coastMotors = true;
     private float mecanumStrafe = 0, dominantXJoystick = 0;
-    int buffer = 10;
+    int buffer = 5;
     private double clawWristDown = 0.82;// Claw Wrist Up = 1
     private double flowerArmMin = 0.14; // max = 1
     private double flowerArmMid = 0.2;
@@ -156,15 +156,13 @@ public class TankDriveOp extends OpMode {
         if(ishc) {
             motorVerticalLeft.setTargetPosition(660);
             motorVerticalRight.setTargetPosition(660);
-            motorVerticalLeft.setPower(0.001);
-            motorVerticalRight.setPower(0.001);
             armDownFlowersL.setPosition(0.6572);
             armUpFlowersR.setPosition(0.6572);
             clawWrist.setPosition(0.9);
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+            if ((motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) &&
+                    (motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition() - buffer || motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + buffer)) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             }
@@ -178,12 +176,12 @@ public class TankDriveOp extends OpMode {
             armDownFlowersL.setPosition(0.64);
             armUpFlowersR.setPosition(0.64);
             clawWrist.setPosition(0.9);
-            motorVerticalLeft.setTargetPosition(2560);
-            motorVerticalRight.setTargetPosition(2560);
+            motorVerticalLeft.setTargetPosition(2500);
+            motorVerticalRight.setTargetPosition(2500);
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition()  - buffer||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+            if ((motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) &&
+                    (motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition() - buffer || motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + buffer)) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             }
@@ -201,8 +199,8 @@ public class TankDriveOp extends OpMode {
             motorVerticalRight.setTargetPosition(1160);
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+            if ((motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) &&
+                    (motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition() - buffer || motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + buffer)) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             }
@@ -221,14 +219,12 @@ public class TankDriveOp extends OpMode {
                 motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 }
-                if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer ||
-                        motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) {
+            if ((motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) &&
+                    (motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition() - buffer || motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + buffer)) {
                     motorVerticalLeft.setPower(1);
                     motorVerticalRight.setPower(1);
                 }
                 else {
-                    motorVerticalLeft.setPower(0.001);
-                    motorVerticalRight.setPower(0.001);
                     clawWrist.setPosition(0.9);
                     motorVerticalRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
                     motorVerticalLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -244,10 +240,8 @@ public class TankDriveOp extends OpMode {
             motorVerticalRight.setTargetPosition(0);
             motorVerticalRight.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorVerticalLeft.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            if (motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition()||
-                    motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + 5 ||
-                    motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition()||
-                    motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + 5) {
+            if ((motorVerticalLeft.getCurrentPosition() < motorVerticalLeft.getTargetPosition() - buffer || motorVerticalLeft.getCurrentPosition() > motorVerticalLeft.getTargetPosition() + buffer) &&
+                    (motorVerticalRight.getCurrentPosition() < motorVerticalRight.getTargetPosition() - buffer || motorVerticalRight.getCurrentPosition() > motorVerticalRight.getTargetPosition() + buffer)) {
                 motorVerticalLeft.setPower(1);
                 motorVerticalRight.setPower(1);
             } else {
@@ -271,8 +265,12 @@ public class TankDriveOp extends OpMode {
             }
 
             if(gamepad2.left_stick_y > 0.25 && motorVerticalLeft.getCurrentPosition() > 5){
-                motorVerticalLeft.setPower(-1);
-                motorVerticalRight.setPower(-1);
+                if(motorVerticalLeft.getCurrentPosition() > 200){
+                    motorVerticalLeft.setPower(-1);
+                    motorVerticalRight.setPower(-1);
+                }
+                motorVerticalLeft.setPower(-0.5);
+                motorVerticalRight.setPower(-0.5);
             }
             else if(gamepad2.left_stick_y < -0.25){
                 motorVerticalRight.setPower(1);
